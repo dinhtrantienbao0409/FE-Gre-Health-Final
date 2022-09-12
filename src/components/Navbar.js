@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import NavLink from "../components/NavLink";
 import { NavData } from "../layoutData/LandingPageData";
 
 const NavBar = () => {
@@ -29,11 +30,7 @@ const NavBar = () => {
           }`}
         >
           {NavData.map((item) => (
-            <li key={item.name} className="md:ml-8 text-xl md:my-0 my-7">
-              <a className="text-white cursor-pointer hover:text-cyan-500 duration-500">
-                {item.name}
-              </a>
-            </li>
+            <NavLink path={item.path} name={item.name} />
           ))}
         </ul>
       </div>
