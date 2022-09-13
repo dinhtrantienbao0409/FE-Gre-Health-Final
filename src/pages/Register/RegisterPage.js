@@ -8,6 +8,9 @@ import * as yup from "yup";
 const schemaValidation = yup.object().shape({
   email: yup.string().email().required(),
   password: yup.string().required().min(3),
+  confirmPassword: yup
+    .string()
+    .oneOf([yup.ref("password"), null], "Passwords must match"),
 });
 
 const Register = () => {
@@ -95,6 +98,27 @@ const Register = () => {
               {errors.password && (
                 <span className="text-sm text-red-600">
                   {errors?.password?.message}
+                </span>
+              )}
+            </div>
+            <div>
+              <label htmlFor="password" className="sr-only">
+                Confirm Password
+              </label>
+              <input
+                id="confirmPassword"
+                name="confirmPassword"
+                type="password"
+                autoComplete="current-password"
+                className="appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                placeholder="Confirm Password"
+                {...register("confirmPassword", { required: true })}
+              />
+            </div>
+            <div>
+              {errors.confirmPassword && (
+                <span className="text-sm text-red-600">
+                  {errors?.confirmPassword?.message}
                 </span>
               )}
             </div>

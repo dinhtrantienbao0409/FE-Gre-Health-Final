@@ -57,7 +57,7 @@ const Login = () => {
           onSubmit={handleSubmit(handleLogin)}
         >
           <input type="hidden" name="remember" defaultValue="true" />
-          <div className="rounded-md shadow-sm -space-y-px">
+          <div className="rounded-md shadow-sm -space-y-px gap-5">
             <div>
               <label htmlFor="email-address" className="sr-only">
                 Email address
