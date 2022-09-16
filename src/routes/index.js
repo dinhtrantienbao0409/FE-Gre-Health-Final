@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import HomePageLayout from "../layouts/HomePage";
 import LandingPageLayout from "../layouts/LandingPage";
 import LandingPage from "../pages/Landing/LandingPage";
 import LoginPage from "../pages/Login/LoginPage";
@@ -13,6 +14,7 @@ const AppRouter = () => {
           <Route path="login" element={<LoginPage />} />
           <Route path="register" element={<Register />} />
         </Route>
+        <Route path="/home" element={<HomePageLayout />}></Route>
       </Routes>
     </BrowserRouter>
   );

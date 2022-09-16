@@ -1,13 +1,13 @@
 import React, { useState } from "react";
-import NavLink from "../components/NavLink";
-import { NavData } from "../layoutData/LandingPageData";
-import Logo from "./Logo";
+import NavLink from "./NavLink";
+import { NavData } from "../../layoutData/LandingPageData";
+import Logo from "../Logo";
 
 const NavBar = () => {
   const [open, setOpen] = useState(false);
   return (
     <div className="shadow-md w-full fixed top-0 left-0">
-      <div className="md:flex items-center justify-between bg-gray-800 py-4 md:px-10 px-7">
+      <div className="md:flex items-center justify-between bg-gray-800 py-4 md:px-10 px-7 h-[80px]">
         <Logo />
         <div
           onClick={() => setOpen(!open)}
