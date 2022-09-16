@@ -36,7 +36,7 @@ const Login = () => {
       const token = response.data;
       if (!token) return;
       localStorage.setItem("access_token", token);
-      // navigate("/");
+      navigate("/home");
     } catch (error) {
       setError(error.message);
     }
