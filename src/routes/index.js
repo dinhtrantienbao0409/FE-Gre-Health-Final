@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import HomePageLayout from "../layouts/HomePage";
 import LandingPageLayout from "../layouts/LandingPage";
+import CreateRecordPage from "../pages/HealthRecord/CreateRecordPage";
 import LandingPage from "../pages/Landing/LandingPage";
 import LoginPage from "../pages/Login/LoginPage";
 import Register from "../pages/Register/RegisterPage";
@@ -14,7 +15,10 @@ const AppRouter = () => {
           <Route path="login" element={<LoginPage />} />
           <Route path="register" element={<Register />} />
         </Route>
-        <Route path="/home" element={<HomePageLayout />}></Route>
+        <Route path="/home" element={<HomePageLayout />}>
+          <Route path="create" element={<CreateRecordPage />} />
+          <Route path="register" element={<Register />} />
+        </Route>
       </Routes>
     </BrowserRouter>
   );
