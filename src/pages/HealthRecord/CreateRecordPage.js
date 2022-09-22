@@ -3,6 +3,19 @@ import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { createRecordFunc } from "../../services/Record";
 import Footer from "../../components/LandingPage/Footer";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
+
+const schemaValidation = yup.object().shape({
+  name: yup.string().required(),
+  gender: yup.string().required(),
+  dateOfBirth: yup.string().required(),
+  address: yup.string().required(),
+  age: yup.string().required(),
+  contact: yup.string().required(),
+  healthCondition: yup.string().required(),
+  doctorSuggestion: yup.string().required(),
+});
 
 export default function CreateRecordPage() {
   const navigate = useNavigate();
@@ -11,7 +24,7 @@ export default function CreateRecordPage() {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm();
+  } = useForm({ resolver: yupResolver(schemaValidation) });
 
   const handleCreateRecord = async (data) => {
     try {
@@ -41,7 +54,7 @@ export default function CreateRecordPage() {
       );
 
       const response = await createRecordFunc(payload);
-      navigate("/home");
+      navigate("/home/record");
 
       return response.data;
     } catch (error) {
@@ -86,18 +99,76 @@ export default function CreateRecordPage() {
                     placeholder="Enter your fullname"
                     {...register("name", { required: true })}
                   />
+                  <div>
+                    {errors.name && (
+                      <span className="text-sm text-red-600">
+                        {errors?.name?.message}
+                      </span>
+                    )}
+                  </div>
                 </div>
                 <div className="w-1/2 flex flex-col item-start">
                   <label className="flex item-start text-sm" htmlFor="gender">
                     Gender
                   </label>
-                  <input
-                    id="gender"
-                    name="gender"
-                    type="text"
-                    className=" appearance-none rounded-md  block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                    {...register("gender", { required: true })}
-                  />
+
+                  <div className="flex flex-row space-x-8">
+                    <div class="form-check">
+                      <input
+                        class="form-check-input appearance-none rounded-full h-4 w-4 border border-gray-300 bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer"
+                        type="radio"
+                        name="flexRadioDefault"
+                        id="flexRadioDefault1"
+                        value="male"
+                        {...register("gender", { required: true })}
+                      />
+                      <label
+                        class="form-check-label inline-block text-gray-800"
+                        for="flexRadioDefault1"
+                      >
+                        Male
+                      </label>
+                    </div>
+                    <div class="form-check">
+                      <input
+                        class="form-check-input appearance-none rounded-full h-4 w-4 border border-gray-300 bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer"
+                        type="radio"
+                        name="flexRadioDefault"
+                        id="flexRadioDefault2"
+                        value="female"
+                        {...register("gender", { required: true })}
+                      />
+                      <label
+                        class="form-check-label inline-block text-gray-800"
+                        for="flexRadioDefault2"
+                      >
+                        Female
+                      </label>
+                    </div>
+                    <div class="form-check">
+                      <input
+                        class="form-check-input appearance-none rounded-full h-4 w-4 border border-gray-300 bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer"
+                        type="radio"
+                        name="flexRadioDefault"
+                        id="flexRadioDefault2"
+                        {...register("gender", { required: true })}
+                      />
+                      <label
+                        class="form-check-label inline-block text-gray-800"
+                        for="flexRadioDefault2"
+                        value="other"
+                      >
+                        Other
+                      </label>
+                    </div>
+                  </div>
+                  <div>
+                    {errors.gender && (
+                      <span className="text-sm text-red-600">
+                        {errors?.gender?.message}
+                      </span>
+                    )}
+                  </div>
                 </div>
               </div>
               <div className="flex space-x-4 my-2 mx-2">
@@ -116,6 +187,13 @@ export default function CreateRecordPage() {
                     placeholder="Enter your date of birth"
                     {...register("dateOfBirth", { required: true })}
                   />
+                  <div>
+                    {errors.dateOfBirth && (
+                      <span className="text-sm text-red-600">
+                        {errors?.dateOfBirth?.message}
+                      </span>
+                    )}
+                  </div>
                 </div>
                 <div className="w-1/2 flex flex-col item-start">
                   <label className="flex item-start text-sm" htmlFor="age">
@@ -128,6 +206,13 @@ export default function CreateRecordPage() {
                     className=" appearance-none rounded-md  block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                     {...register("age", { required: true })}
                   />
+                  <div>
+                    {errors.age && (
+                      <span className="text-sm text-red-600">
+                        {errors?.age?.message}
+                      </span>
+                    )}
+                  </div>
                 </div>
               </div>
               <div className="flex flex-col mx-2 ">
@@ -143,6 +228,13 @@ export default function CreateRecordPage() {
                     placeholder="Enter your address"
                     {...register("address", { required: true })}
                   />
+                  <div>
+                    {errors.address && (
+                      <span className="text-sm text-red-600">
+                        {errors?.address?.message}
+                      </span>
+                    )}
+                  </div>
                 </div>
                 <div className=" w-2/3 flex flex-col item-start">
                   <label className="flex item-start text-sm" htmlFor="contact">
@@ -156,6 +248,13 @@ export default function CreateRecordPage() {
                     placeholder="Enter your phone number"
                     {...register("contact", { required: true })}
                   />
+                  <div>
+                    {errors.contact && (
+                      <span className="text-sm text-red-600">
+                        {errors?.contact?.message}
+                      </span>
+                    )}
+                  </div>
                 </div>
                 <div className="my-4 w-2/3 flex flex-col item-start">
                   <label
@@ -172,6 +271,13 @@ export default function CreateRecordPage() {
                     placeholder=""
                     {...register("healthCondition", { required: true })}
                   />
+                  <div>
+                    {errors.healthCondition && (
+                      <span className="text-sm text-red-600">
+                        {errors?.healthCondition?.message}
+                      </span>
+                    )}
+                  </div>
                 </div>
                 <div className=" w-2/3 flex flex-col item-start">
                   <label
@@ -188,6 +294,13 @@ export default function CreateRecordPage() {
                     placeholder=""
                     {...register("doctorSuggestion", { required: true })}
                   />
+                  <div>
+                    {errors.doctorSuggestion && (
+                      <span className="text-sm text-red-600">
+                        {errors?.doctorSuggestion?.message}
+                      </span>
+                    )}
+                  </div>
                 </div>
               </div>
             </div>
