@@ -4,6 +4,8 @@ import { loginFunc } from "../../services/Auth";
 import { useNavigate } from "react-router-dom";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
+import { useDispatch } from "react-redux";
+import { setLoggedInUser } from "slice/authSlice/logginSlice";
 
 const schemaValidation = yup.object().shape({
   email: yup.string().email().required(),
@@ -11,6 +13,7 @@ const schemaValidation = yup.object().shape({
 });
 
 const Login = () => {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const [error, setError] = useState("");
   const {
@@ -32,8 +35,9 @@ const Login = () => {
         payload
       );
       const response = await loginFunc(payload);
+      const { token, payload: loggedInUser } = response.data;
+      dispatch(setLoggedInUser(loggedInUser));
 
-      const token = response.data;
       if (!token) return;
       localStorage.setItem("access_token", token);
       navigate("/home");

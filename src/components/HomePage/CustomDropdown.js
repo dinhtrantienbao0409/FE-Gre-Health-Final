@@ -2,12 +2,14 @@ import { Fragment } from "react";
 import { Menu, Transition } from "@headlessui/react";
 import { ChevronDownIcon } from "@heroicons/react/20/solid";
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
 export default function CustomDropdown() {
+  const loggedInUser = useSelector((state) => state.auth.email);
   return (
     <div className="flex flex-row">
       <img
@@ -18,7 +20,7 @@ export default function CustomDropdown() {
       <Menu as="div" className="relative  text-left">
         <div>
           <Menu.Button className="inline-flex w-full justify-center rounded-md  px-4 py-2 text-sm font-medium text-white shadow-sm  focus:outline-none ">
-            Options
+            {loggedInUser}
             <ChevronDownIcon
               className="-mr-1 ml-2 h-5 w-5"
               aria-hidden="true"
