@@ -17,9 +17,8 @@ const AppRouter = () => {
           <Route path="register" element={<Register />} />
         </Route>
         <Route path="/home" element={<HomePageLayout />}>
-          <Route path="record" element={<ViewRecordPage />}>
-            <Route path="create" element={<CreateRecordPage />} />
-          </Route>
+          <Route path="record" element={<ViewRecordPage />} />
+          <Route path="record/create" element={<CreateRecordPage />} />
         </Route>
       </Routes>
     </BrowserRouter>
