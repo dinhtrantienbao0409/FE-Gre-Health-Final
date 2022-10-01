@@ -1,13 +1,14 @@
-import { useForm } from "react-hook-form";
-import { useState } from "react";
-import { registerFunc } from "../../services/Auth";
-import { useNavigate } from "react-router-dom";
-import { yupResolver } from "@hookform/resolvers/yup";
+// import { useForm } from "react-hook-form";
+// import { registerFunc } from "../../services/Auth";
+// import { useNavigate } from "react-router-dom";
+// import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
+import { useState } from "react";
 import Stepper from "components/LandingPage/Stepper/Stepper";
 import StepperControl from "components/LandingPage/Stepper/StepperControl";
 import Details from "components/LandingPage/Stepper/Steps/Details";
 import Final from "components/LandingPage/Stepper/Steps/Final";
+import Account from "components/LandingPage/Stepper/Steps/Account";
 
 const schemaValidation = yup.object().shape({
   email: yup.string().email().required(),
@@ -18,13 +19,13 @@ const schemaValidation = yup.object().shape({
 });
 
 const Register = () => {
-  const navigate = useNavigate();
-  const [error, setError] = useState("");
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm({ resolver: yupResolver(schemaValidation) });
+  // const navigate = useNavigate();
+  // const [error, setError] = useState("");
+  // const {
+  //   register,
+  //   handleSubmit,
+  //   formState: { errors },
+  // } = useForm({ resolver: yupResolver(schemaValidation) });
 
   /* Stepper */
   const [currentStep, setCurrentStep] = useState(1);
@@ -32,187 +33,9 @@ const Register = () => {
   const displayStep = (step) => {
     switch (step) {
       case 1:
-        return (
-          <div>
-            <form
-              className="my-12 space-y-6"
-              onSubmit={handleSubmit(handleRegister)}
-            >
-              <input type="hidden" name="remember" defaultValue="true" />
-              <div className="rounded-md shadow-sm my-4 mx-2">
-                <div className="flex my-4 ">
-                  <div className="w-full flex flex-col item-start">
-                    <label className="flex item-start text-sm font-bold text-gray-500">
-                      Email Address
-                    </label>
-                    <input
-                      id="email-address"
-                      name="email"
-                      type="text"
-                      autoComplete="email"
-                      className="appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                      placeholder="Email address"
-                      {...register("email", { required: true })}
-                    />
-                    <div>
-                      {errors.email && (
-                        <span className="text-sm text-red-600">
-                          {errors?.email?.message}
-                        </span>
-                      )}
-                    </div>
-                  </div>
-                </div>
-                <div className="flex space-x-4 my-4">
-                  <div className="w-full flex flex-col item-start">
-                    <label className="flex item-start text-sm font-bold text-gray-500">
-                      Password
-                    </label>
-                    <input
-                      id="password"
-                      name="password"
-                      type="password"
-                      autoComplete="current-password"
-                      className="appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                      placeholder="Password"
-                      {...register("password", { required: true })}
-                    />
-                    <div>
-                      {errors.password && (
-                        <span className="text-sm text-red-600">
-                          {errors?.password?.message}
-                        </span>
-                      )}
-                    </div>
-                  </div>
-                </div>
-                <div className="flex space-x-4 my-4">
-                  <div className="w-full flex flex-col item-start">
-                    <label className="flex item-start text-sm font-bold text-gray-500">
-                      Confirm Password
-                    </label>
-                    <input
-                      id="confirmPassword"
-                      name="confirmPassword"
-                      type="password"
-                      autoComplete="current-password"
-                      className="appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                      placeholder="Confirm Password"
-                      {...register("confirmPassword", { required: true })}
-                    />
-                    <div>
-                      {errors.confirmPassword && (
-                        <span className="text-sm text-red-600">
-                          {errors?.confirmPassword?.message}
-                        </span>
-                      )}
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div>
-                <button
-                  type="submit"
-                  className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-cyan-500 hover:bg-cyan-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-400"
-                >
-                  Register
-                </button>
-              </div>
-            </form>
-          </div>
-        );
+        return <Account />;
       case 2:
-        return (
-          <div>
-            <form
-              className="my-12 space-y-6"
-              onSubmit={handleSubmit(handleRegister)}
-            >
-              <input type="hidden" name="remember" defaultValue="true" />
-              <div className="rounded-md shadow-sm my-4 mx-2">
-                <div className="flex my-4 ">
-                  <div className="w-full flex flex-col item-start">
-                    <label className="flex item-start text-sm font-bold text-gray-500">
-                      Email Address
-                    </label>
-                    <input
-                      id="email-address"
-                      name="email"
-                      type="text"
-                      autoComplete="email"
-                      className="appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                      placeholder="Email address"
-                      {...register("email", { required: true })}
-                    />
-                    <div>
-                      {errors.email && (
-                        <span className="text-sm text-red-600">
-                          {errors?.email?.message}
-                        </span>
-                      )}
-                    </div>
-                  </div>
-                </div>
-                <div className="flex space-x-4 my-4">
-                  <div className="w-full flex flex-col item-start">
-                    <label className="flex item-start text-sm font-bold text-gray-500">
-                      Password
-                    </label>
-                    <input
-                      id="password"
-                      name="password"
-                      type="password"
-                      autoComplete="current-password"
-                      className="appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                      placeholder="Password"
-                      {...register("password", { required: true })}
-                    />
-                    <div>
-                      {errors.password && (
-                        <span className="text-sm text-red-600">
-                          {errors?.password?.message}
-                        </span>
-                      )}
-                    </div>
-                  </div>
-                </div>
-                <div className="flex space-x-4 my-4">
-                  <div className="w-full flex flex-col item-start">
-                    <label className="flex item-start text-sm font-bold text-gray-500">
-                      Confirm Password
-                    </label>
-                    <input
-                      id="confirmPassword"
-                      name="confirmPassword"
-                      type="password"
-                      autoComplete="current-password"
-                      className="appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                      placeholder="Confirm Password"
-                      {...register("confirmPassword", { required: true })}
-                    />
-                    <div>
-                      {errors.confirmPassword && (
-                        <span className="text-sm text-red-600">
-                          {errors?.confirmPassword?.message}
-                        </span>
-                      )}
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div>
-                <button
-                  type="submit"
-                  className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-cyan-500 hover:bg-cyan-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-400"
-                >
-                  Register
-                </button>
-              </div>
-            </form>
-          </div>
-        );
+        return <Details />;
       case 3:
         return <Final />;
       default:
@@ -227,28 +50,28 @@ const Register = () => {
   };
   /* Stepper */
 
-  const handleRegister = async (data) => {
-    console.log("🚀 ~ file: Login.js ~ line 26 ~ handleLogin ~ data", data);
-    try {
-      const { email, password } = data;
-      const payload = {
-        email,
-        password,
-      };
-      console.log(
-        "🚀 ~ file: Login.js ~ line 30 ~ handleLogin ~ payload",
-        payload
-      );
-      const response = await registerFunc(payload);
+  // const handleRegister = async (data) => {
+  //   console.log("🚀 ~ file: Login.js ~ line 26 ~ handleLogin ~ data", data);
+  //   try {
+  //     const { email, password } = data;
+  //     const payload = {
+  //       email,
+  //       password,
+  //     };
+  //     console.log(
+  //       "🚀 ~ file: Login.js ~ line 30 ~ handleLogin ~ payload",
+  //       payload
+  //     );
+  //     const response = await registerFunc(payload);
 
-      const token = response.data;
-      if (!token) return;
-      localStorage.setItem("access_token", token);
-      navigate("/login");
-    } catch (error) {
-      setError(error.message);
-    }
-  };
+  //     const token = response.data;
+  //     if (!token) return;
+  //     localStorage.setItem("access_token", token);
+  //     navigate("/login");
+  //   } catch (error) {
+  //     setError(error.message);
+  //   }
+  // };
 
   return (
     <div className="md:w-1/2 mx-auto my-48 shadow-xl rounded-2xl pb-2 bg-white">
