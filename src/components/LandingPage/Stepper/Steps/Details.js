@@ -3,7 +3,7 @@ import { useState } from "react";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useDispatch } from "react-redux";
-import { setRegisteredUser } from "slice/authSlice/registerSlice";
+import { setUserDetails } from "slice/authSlice/registerSlice";
 
 const schemaValidation = yup.object().shape({
   name: yup.string().required(),
@@ -27,7 +27,7 @@ export default function Details() {
   const onSubmit = (data) => {
     console.log("🚀 ~ file: Account.js ~ line 28 ~ onSubmit ~ data", data);
 
-    dispatch(setRegisteredUser(data));
+    dispatch(setUserDetails(data));
   };
   return (
     <div>
