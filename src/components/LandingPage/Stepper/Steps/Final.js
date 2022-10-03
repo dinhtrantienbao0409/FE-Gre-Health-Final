@@ -1,4 +1,51 @@
+import { registerFunc } from "services/Auth";
+import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { useSelector } from "react-redux";
 export default function Final() {
+  const {
+    email,
+    password,
+    confirmPassword,
+    name,
+    dateOfBirth,
+    gender,
+    address,
+    contact,
+    jobTitle,
+  } = useSelector((state) => state.user);
+  const navigate = useNavigate();
+  const [error, setError] = useState("");
+
+  const handleRegister = async () => {
+    try {
+      const payload = {
+        email,
+        password,
+        confirmPassword,
+        name,
+        dateOfBirth,
+        gender,
+        address,
+        contact,
+        jobTitle,
+      };
+
+      const response = await registerFunc(payload);
+
+      const token = response.data;
+      console.log(
+        "🚀 ~ file: Final.js ~ line 37 ~ handleRegister ~ token",
+        token
+      );
+      if (!token) return;
+      localStorage.setItem("access_token", token);
+      navigate("/login");
+    } catch (error) {
+      setError(error.message);
+    }
+  };
+
   return (
     <div className="container md:mt-10">
       <div className="flex flex-col items-center">
@@ -21,6 +68,14 @@ export default function Final() {
         </div>
         <div className="text-lg font-semibold text-gray-500">
           Your Account has been created.
+        </div>
+        <div>
+          <button
+            onClick={() => handleRegister()}
+            className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-cyan-500 hover:bg-cyan-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-400"
+          >
+            Register
+          </button>
         </div>
       </div>
     </div>

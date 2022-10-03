@@ -1,6 +1,6 @@
 // import { useForm } from "react-hook-form";
-// import { registerFunc } from "../../services/Auth";
-// import { useNavigate } from "react-router-dom";
+import { registerFunc } from "services/Auth";
+import { useNavigate } from "react-router-dom";
 // import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useState } from "react";
@@ -9,18 +9,30 @@ import StepperControl from "components/LandingPage/Stepper/StepperControl";
 import Details from "components/LandingPage/Stepper/Steps/Details";
 import Final from "components/LandingPage/Stepper/Steps/Final";
 import Account from "components/LandingPage/Stepper/Steps/Account";
+import { useSelector } from "react-redux";
 
-const schemaValidation = yup.object().shape({
-  email: yup.string().email().required(),
-  password: yup.string().required().min(3),
-  confirmPassword: yup
-    .string()
-    .oneOf([yup.ref("password"), null], "Passwords must match"),
-});
+// const schemaValidation = yup.object().shape({
+//   email: yup.string().email().required(),
+//   password: yup.string().required().min(3),
+//   confirmPassword: yup
+//     .string()
+//     .oneOf([yup.ref("password"), null], "Passwords must match"),
+// });
 
 const Register = () => {
-  // const navigate = useNavigate();
-  // const [error, setError] = useState("");
+  const {
+    email,
+    password,
+    confirmPassword,
+    name,
+    dateOfBirth,
+    gender,
+    address,
+    contact,
+    jobTitle,
+  } = useSelector((state) => state.user);
+  const navigate = useNavigate();
+  const [error, setError] = useState("");
   // const {
   //   register,
   //   handleSubmit,
@@ -50,28 +62,30 @@ const Register = () => {
   };
   /* Stepper */
 
-  // const handleRegister = async (data) => {
-  //   console.log("🚀 ~ file: Login.js ~ line 26 ~ handleLogin ~ data", data);
-  //   try {
-  //     const { email, password } = data;
-  //     const payload = {
-  //       email,
-  //       password,
-  //     };
-  //     console.log(
-  //       "🚀 ~ file: Login.js ~ line 30 ~ handleLogin ~ payload",
-  //       payload
-  //     );
-  //     const response = await registerFunc(payload);
+  const handleRegister = async () => {
+    try {
+      const payload = {
+        email,
+        password,
+        confirmPassword,
+        name,
+        dateOfBirth,
+        gender,
+        address,
+        contact,
+        jobTitle,
+      };
 
-  //     const token = response.data;
-  //     if (!token) return;
-  //     localStorage.setItem("access_token", token);
-  //     navigate("/login");
-  //   } catch (error) {
-  //     setError(error.message);
-  //   }
-  // };
+      const response = await registerFunc(payload);
+
+      const token = response.data;
+      if (!token) return;
+      localStorage.setItem("access_token", token);
+      navigate("/login");
+    } catch (error) {
+      setError(error.message);
+    }
+  };
 
   return (
     <div className="md:w-1/2 mx-auto my-48 shadow-xl rounded-2xl pb-2 bg-white">
