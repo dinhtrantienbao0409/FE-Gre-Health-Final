@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Outlet } from "react-router-dom";
 import Footer from "components/LandingPage/Footer";
 import { getAllRecordsFunc } from "services/Record";
+import TableBody from "components/HomePage/TableBody";
 
 export default function ViewRecordPage() {
   const tableHeadData = [
@@ -15,7 +16,7 @@ export default function ViewRecordPage() {
     { name: "Doctor Suggestion" },
   ];
 
-  const [records, setRecords] = useState();
+  const [records, setRecords] = useState([]);
   console.log(
     "🚀 ~ file: ViewRecordPage.js ~ line 17 ~ ViewRecordPage ~ records",
     records
@@ -52,7 +53,8 @@ export default function ViewRecordPage() {
                 ))}
               </tr>
             </thead>
-            <tbody>
+            <TableBody data={records} />
+            {/* <tbody>
               {records &&
                 records.map((record) => (
                   <tr key={record._id}>
@@ -66,7 +68,7 @@ export default function ViewRecordPage() {
                     <td class="py-4 px-6">{record.doctorSuggestion}</td>
                   </tr>
                 ))}
-            </tbody>
+            </tbody> */}
           </table>
         </div>
       </div>

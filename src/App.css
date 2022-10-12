@@ -36,3 +36,30 @@
     transform: rotate(360deg);
   }
 }
+
+.pagination {
+  padding: 18px;
+  list-style: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.2rem;
+  gap: 10px;
+}
+
+.pagination .page-num {
+  padding: 8px 15px;
+  cursor: pointer;
+  border-radius: 3px;
+  font-weight: 700;
+}
+
+.pagination .page-num:hover {
+  background-color: #61dafb;
+  color: white;
+}
+
+.pagination .active {
+  background-color: #61dafb;
+
+}
