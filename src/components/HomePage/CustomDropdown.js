@@ -1,8 +1,9 @@
-import { Fragment } from "react";
+import { Fragment, useState } from "react";
 import { Menu, Transition } from "@headlessui/react";
 import { ChevronDownIcon } from "@heroicons/react/20/solid";
 import { Link, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
+import Dialog from "components/HomePage/Dialog";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -10,6 +11,10 @@ function classNames(...classes) {
 
 export default function CustomDropdown() {
   const navigate = useNavigate();
+  const [dialog, setDialog] = useState({
+    message: "",
+    isLoading: false,
+  });
   const loggedInUser = useSelector((state) => state.auth.email);
   const userId = useSelector((state) => state.auth.id);
   console.log(
@@ -20,6 +25,31 @@ export default function CustomDropdown() {
   const handleNavigate = () => {
     navigate("/profile");
   };
+
+  const handleDialog = (message, isLoading) => {
+    setDialog({
+      message,
+      isLoading,
+    });
+  };
+
+  const handleLogout = () => {
+    handleDialog(
+      `You are going to Logout of your account ${loggedInUser}! Do you like to continue?`,
+      true
+    );
+  };
+
+  const confirmLogout = (choose) => {
+    if (choose) {
+      localStorage.removeItem("access_token");
+      navigate("/login");
+      handleDialog("", false);
+    } else {
+      handleDialog("", false);
+    }
+  };
+
   return (
     <div className="flex flex-row">
       <img
@@ -60,7 +90,7 @@ export default function CustomDropdown() {
                     )}
                     data-id={userId}
                   >
-                    Account settings
+                    Profile
                   </Link>
                 )}
               </Menu.Item>
@@ -73,30 +103,38 @@ export default function CustomDropdown() {
                       "block px-4 py-2 text-sm"
                     )}
                   >
-                    Support
+                    Health Record
                   </Link>
                 )}
               </Menu.Item>
 
-              <form method="POST" action="#">
-                <Menu.Item>
-                  {({ active }) => (
-                    <button
-                      type="submit"
-                      className={classNames(
-                        active ? "bg-gray-100 text-gray-900" : "text-gray-700",
-                        "block w-full px-4 py-2 text-left text-sm"
-                      )}
-                    >
-                      Sign out
-                    </button>
-                  )}
-                </Menu.Item>
-              </form>
+              {/* <form method="POST" action="#"> */}
+              <Menu.Item>
+                {({ active }) => (
+                  <button
+                    // type="submit"
+                    onClick={handleLogout}
+                    className={classNames(
+                      active ? "bg-gray-100 text-gray-900" : "text-gray-700",
+                      "block w-full px-4 py-2 text-left text-sm"
+                    )}
+                  >
+                    Sign out
+                  </button>
+                )}
+              </Menu.Item>
+              {/* </form> */}
             </div>
           </Menu.Items>
         </Transition>
       </Menu>
+      {dialog.isLoading && (
+        <Dialog
+          //Update
+          onDialog={confirmLogout}
+          message={dialog.message}
+        />
+      )}
     </div>
   );
 }
