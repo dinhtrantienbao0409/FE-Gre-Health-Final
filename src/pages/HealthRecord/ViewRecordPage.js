@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Outlet } from "react-router-dom";
-import Footer from "../../components/LandingPage/Footer";
-import { getAllRecordsFunc } from "../../services/Record";
+import Footer from "components/LandingPage/Footer";
+import { getAllRecordsFunc } from "services/Record";
 
 export default function ViewRecordPage() {
   const tableHeadData = [

@@ -8,3 +8,7 @@ export const registerFunc = async (payload) =>
 
 export const getUserProfile = async (userId) =>
   axios.get(`http://localhost:3001/api/auth/${userId}`);
+
+export const getAllUsers = async (page, limit) =>
+  // axios.get(`http://localhost:3001/api/auth?${page}&${limit}`);
+  axios.get(`http://localhost:3001/api/auth`);
