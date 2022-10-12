@@ -1,7 +1,7 @@
 import { Fragment } from "react";
 import { Menu, Transition } from "@headlessui/react";
 import { ChevronDownIcon } from "@heroicons/react/20/solid";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 
 function classNames(...classes) {
@@ -9,7 +9,17 @@ function classNames(...classes) {
 }
 
 export default function CustomDropdown() {
+  const navigate = useNavigate();
   const loggedInUser = useSelector((state) => state.auth.email);
+  const userId = useSelector((state) => state.auth.id);
+  console.log(
+    "🚀 ~ file: CustomDropdown.js ~ line 14 ~ CustomDropdown ~ userId",
+    userId
+  );
+
+  const handleNavigate = () => {
+    navigate("/profile");
+  };
   return (
     <div className="flex flex-row">
       <img
@@ -42,11 +52,13 @@ export default function CustomDropdown() {
               <Menu.Item>
                 {({ active }) => (
                   <Link
-                    to=""
+                    to="profile"
+                    onClick={() => handleNavigate()}
                     className={classNames(
                       active ? "bg-gray-100 text-gray-900" : "text-gray-700",
                       "block px-4 py-2 text-sm"
                     )}
+                    data-id={userId}
                   >
                     Account settings
                   </Link>

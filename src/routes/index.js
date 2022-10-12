@@ -1,3 +1,4 @@
+import UserProfile from "pages/Profile/UserProfile";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import HomePageLayout from "../layouts/HomePage";
 import LandingPageLayout from "../layouts/LandingPage";
@@ -18,6 +19,7 @@ const AppRouter = () => {
         </Route>
         <Route path="/home" element={<HomePageLayout />}>
           <Route path="record" element={<ViewRecordPage />} />
+          <Route path="profile" element={<UserProfile />} />
           <Route path="record/create" element={<CreateRecordPage />} />
         </Route>
       </Routes>
