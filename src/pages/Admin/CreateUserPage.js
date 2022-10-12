@@ -56,6 +56,8 @@ export default function AdminCreateUserPage() {
       };
 
       const response = await registerFunc(payload);
+      navigate("/home/admin/users");
+
       return response.data;
     } catch (error) {
       setError(error.message);
