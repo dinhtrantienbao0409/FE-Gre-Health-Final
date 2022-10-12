@@ -1,23 +1,26 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
-import { createRecordFunc } from "../../services/Record";
-import Footer from "../../components/LandingPage/Footer";
+
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 
+import Footer from "components/LandingPage/Footer";
+import { registerFunc } from "services/Auth";
+
 const schemaValidation = yup.object().shape({
+  email: yup.string().email().required(),
+  password: yup.string().required().min(3),
   name: yup.string().required(),
   gender: yup.string().required(),
   dateOfBirth: yup.string().required(),
   address: yup.string().required(),
-  age: yup.string().required(),
   contact: yup.string().required(),
-  healthCondition: yup.string().required(),
-  doctorSuggestion: yup.string().required(),
+  role: yup.string().required(),
+  jobTitle: yup.string().required(),
 });
 
-export default function CreateRecordPage() {
+export default function AdminCreateUserPage() {
   const navigate = useNavigate();
   const [error, setError] = useState("");
   const {
@@ -26,36 +29,33 @@ export default function CreateRecordPage() {
     formState: { errors },
   } = useForm({ resolver: yupResolver(schemaValidation) });
 
-  const handleCreateRecord = async (data) => {
+  const handleCreateUser = async (data) => {
     try {
       const {
+        email,
+        password,
         name,
         gender,
         dateOfBirth,
         address,
-        age,
         contact,
-        healthCondition,
-        doctorSuggestion,
+        role,
+        jobTitle,
       } = data;
+
       const payload = {
+        email,
+        password,
         name,
         gender,
         dateOfBirth,
         address,
-        age,
         contact,
-        healthCondition,
-        doctorSuggestion,
+        role,
+        jobTitle,
       };
-      console.log(
-        "🚀 ~ file: CreateRecordPage.js ~ line 38 ~ CreateRecordPage ~ payload",
-        payload
-      );
 
-      const response = await createRecordFunc(payload);
-      navigate("/home/record");
-
+      const response = await registerFunc(payload);
       return response.data;
     } catch (error) {
       setError(error.message);
@@ -67,7 +67,7 @@ export default function CreateRecordPage() {
         <div className=" p-10 shadow-xl   w-full space-y-8 gap-5 rounded-lg">
           <div>
             <h1 className="mt-2 text-start text-3xl font-extrabold text-gray-900">
-              Medical Record
+              Create User
             </h1>
             <p className=" text-gray-500 text-start text-sm">
               Lorem ipsum dolor sit amet consect adipisicing elit. Possimus
@@ -82,10 +82,58 @@ export default function CreateRecordPage() {
             className="mt-8 space-y-6"
             // action="#"
             // method="POST"
-            onSubmit={handleSubmit(handleCreateRecord)}
+            onSubmit={handleSubmit(handleCreateUser)}
           >
             <input type="hidden" name="remember" defaultValue="true" />
             <div className="rounded-md shadow-sm -space-y-px gap-5">
+              <div className="flex space-x-4 my-4 mx-2">
+                <div className="w-1/2 flex flex-col item-start">
+                  <label
+                    className="flex item-start text-sm font-bold text-gray-600"
+                    htmlFor="email"
+                  >
+                    Email
+                  </label>
+                  <input
+                    id="email"
+                    name="email"
+                    type="email"
+                    className=" appearance-none rounded-md block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                    placeholder="Enter user email"
+                    {...register("email", { required: true })}
+                  />
+                  <div>
+                    {errors.email && (
+                      <span className="text-sm text-red-600">
+                        {errors?.email?.message}
+                      </span>
+                    )}
+                  </div>
+                </div>
+                <div className="w-1/2 flex flex-col item-start">
+                  <label
+                    className="flex item-start text-sm font-bold text-gray-600"
+                    htmlFor="password"
+                  >
+                    Password
+                  </label>
+                  <input
+                    id="password"
+                    name="password"
+                    type="password"
+                    className=" appearance-none rounded-md block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                    placeholder="Enter user password"
+                    {...register("password", { required: true })}
+                  />
+                  <div>
+                    {errors.password && (
+                      <span className="text-sm text-red-600">
+                        {errors?.password?.message}
+                      </span>
+                    )}
+                  </div>
+                </div>
+              </div>
               <div className="flex space-x-4 my-4 mx-2">
                 <div className="w-1/2 flex flex-col item-start">
                   <label
@@ -99,7 +147,7 @@ export default function CreateRecordPage() {
                     name="name"
                     type="text"
                     className=" appearance-none rounded-md block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                    placeholder="Enter your fullname"
+                    placeholder="Enter user fullname"
                     {...register("name", { required: true })}
                   />
                   <div>
@@ -178,7 +226,7 @@ export default function CreateRecordPage() {
                 </div>
               </div>
               <div className="flex space-x-4 my-2 mx-2">
-                <div className="w-1/2 flex flex-col item-start">
+                <div className="w-1/2 flex flex-col item-start my-4">
                   <label
                     className="flex item-start text-sm font-bold text-gray-600"
                     htmlFor="date-of-birth"
@@ -190,7 +238,7 @@ export default function CreateRecordPage() {
                     name="dateOfBirth"
                     type="text"
                     className=" appearance-none rounded-md  block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                    placeholder="Enter your date of birth"
+                    placeholder="Enter user date of birth"
                     {...register("dateOfBirth", { required: true })}
                   />
                   <div>
@@ -201,66 +249,19 @@ export default function CreateRecordPage() {
                     )}
                   </div>
                 </div>
-                <div className="w-1/2 flex flex-col item-start">
-                  <label
-                    className="flex item-start text-sm font-bold text-gray-600"
-                    htmlFor="age"
-                  >
-                    Age
-                  </label>
-                  <input
-                    id="age"
-                    name="age"
-                    type="text"
-                    className=" appearance-none rounded-md  block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                    {...register("age", { required: true })}
-                  />
-                  <div>
-                    {errors.age && (
-                      <span className="text-sm text-red-600">
-                        {errors?.age?.message}
-                      </span>
-                    )}
-                  </div>
-                </div>
-              </div>
-              <div className="flex flex-col mx-2 ">
-                <div className="my-4 w-2/3 flex flex-col item-start">
-                  <label
-                    className="flex item-start text-sm font-bold text-gray-600"
-                    htmlFor="address"
-                  >
-                    Address
-                  </label>
-                  <input
-                    id="address"
-                    name="address"
-                    type="text"
-                    className=" appearance-none rounded-md  block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                    placeholder="Enter your address"
-                    {...register("address", { required: true })}
-                  />
-                  <div>
-                    {errors.address && (
-                      <span className="text-sm text-red-600">
-                        {errors?.address?.message}
-                      </span>
-                    )}
-                  </div>
-                </div>
-                <div className=" w-2/3 flex flex-col item-start">
+                <div className="w-1/2 flex flex-col item-start my-4">
                   <label
                     className="flex item-start text-sm font-bold text-gray-600"
                     htmlFor="contact"
                   >
-                    Phone number
+                    Phone Number
                   </label>
                   <input
                     id="contact"
                     name="contact"
                     type="text"
                     className=" appearance-none rounded-md  block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                    placeholder="Enter your phone number"
+                    placeholder="Enter user phone number"
                     {...register("contact", { required: true })}
                   />
                   <div>
@@ -271,62 +272,140 @@ export default function CreateRecordPage() {
                     )}
                   </div>
                 </div>
-                <div className="my-4 w-2/3 flex flex-col item-start">
+              </div>
+              <div className="flex space-x-4 my-4 mx-2">
+                <div className="w-1/2 flex flex-col item-start">
                   <label
                     className="flex item-start text-sm font-bold text-gray-600"
-                    htmlFor="healthCondition"
+                    htmlFor="address"
                   >
-                    Health Condition
+                    Address
                   </label>
                   <input
-                    id="healthCondition"
-                    name="healthCondition"
+                    id="address"
+                    name="address"
                     type="text"
-                    className=" appearance-none rounded-md  block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                    placeholder=""
-                    {...register("healthCondition", { required: true })}
+                    className=" appearance-none rounded-md block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                    placeholder="Enter user address"
+                    {...register("address", { required: true })}
                   />
                   <div>
-                    {errors.healthCondition && (
+                    {errors.address && (
                       <span className="text-sm text-red-600">
-                        {errors?.healthCondition?.message}
+                        {errors?.address?.message}
                       </span>
                     )}
                   </div>
                 </div>
-                <div className=" w-2/3 flex flex-col item-start">
+                <div className="w-1/2 flex flex-col item-start">
                   <label
                     className="flex item-start text-sm font-bold text-gray-600"
-                    htmlFor="doctorSuggestion"
+                    htmlFor="role"
                   >
-                    Doctor Suggestion
+                    Role
+                  </label>
+
+                  <div className="flex flex-row space-x-8 mt-2">
+                    <div class="form-check">
+                      <input
+                        class="form-check-input appearance-none rounded-full h-4 w-4 border border-gray-300 bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer"
+                        type="radio"
+                        name="flexRadioDefault"
+                        id="flexRadioDefault1"
+                        value="doctor"
+                        {...register("role", { required: true })}
+                      />
+                      <label
+                        class="form-check-label inline-block text-gray-800"
+                        for="flexRadioDefault1"
+                      >
+                        Doctor
+                      </label>
+                    </div>
+                    <div class="form-check">
+                      <input
+                        class="form-check-input appearance-none rounded-full h-4 w-4 border border-gray-300 bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer"
+                        type="radio"
+                        name="flexRadioDefault"
+                        id="flexRadioDefault2"
+                        value="receptionist"
+                        {...register("role", { required: true })}
+                      />
+                      <label
+                        class="form-check-label inline-block text-gray-800"
+                        for="flexRadioDefault2"
+                      >
+                        Receptionist
+                      </label>
+                    </div>
+                    <div class="form-check">
+                      <input
+                        class="form-check-input appearance-none rounded-full h-4 w-4 border border-gray-300 bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer"
+                        type="radio"
+                        name="flexRadioDefault"
+                        id="flexRadioDefault2"
+                        {...register("role", { required: true })}
+                      />
+                      <label
+                        class="form-check-label inline-block text-gray-800"
+                        for="flexRadioDefault2"
+                        value="user"
+                      >
+                        User
+                      </label>
+                    </div>
+                    <div class="form-check">
+                      <input
+                        class="form-check-input appearance-none rounded-full h-4 w-4 border border-gray-300 bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer"
+                        type="radio"
+                        name="flexRadioDefault"
+                        id="flexRadioDefault2"
+                        {...register("role", { required: true })}
+                      />
+                      <label
+                        class="form-check-label inline-block text-gray-800"
+                        for="flexRadioDefault2"
+                        value="admin"
+                      >
+                        Admin
+                      </label>
+                    </div>
+                  </div>
+                  <div>
+                    {errors.role && (
+                      <span className="text-sm text-red-600">
+                        {errors?.role?.message}
+                      </span>
+                    )}
+                  </div>
+                </div>
+              </div>
+              <div className="flex flex-col mx-2 ">
+                <div className="my-4 w-2/3 flex flex-col item-start">
+                  <label
+                    className="flex item-start text-sm font-bold text-gray-600"
+                    htmlFor="jobTitle"
+                  >
+                    Job Title
                   </label>
                   <input
-                    id="doctorSuggestion"
-                    name="doctorSuggestion"
+                    id="jobTitle"
+                    name="jobTitle"
                     type="text"
                     className=" appearance-none rounded-md  block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                    placeholder=""
-                    {...register("doctorSuggestion", { required: true })}
+                    placeholder="Enter user Jobtitle "
+                    {...register("jobTitle", { required: true })}
                   />
                   <div>
-                    {errors.doctorSuggestion && (
+                    {errors.jobTitle && (
                       <span className="text-sm text-red-600">
-                        {errors?.doctorSuggestion?.message}
+                        {errors?.jobTitle?.message}
                       </span>
                     )}
                   </div>
                 </div>
               </div>
             </div>
-            <div className="flex items-center my-4 before:flex-1 before:border-t before:border-gray-300 before:mt-0 after:flex-1 after:border-t after:border-gray-300 after:mt-0"></div>
-            <h1 className="mt-2 text-start text-xl font-extrabold text-gray-900">
-              Claim Information
-            </h1>
-            <div className="flex items-center my-4 before:flex-1 before:border-t before:border-gray-300 before:mt-0 after:flex-1 after:border-t after:border-gray-300 after:mt-0"></div>
-            <h1 className="mt-2 text-start text-xl font-extrabold text-gray-900">
-              Medical Data
-            </h1>
             <div className="flex items-center my-4 before:flex-1 before:border-t before:border-gray-300 before:mt-0 after:flex-1 after:border-t after:border-gray-300 after:mt-0"></div>
 
             <div>

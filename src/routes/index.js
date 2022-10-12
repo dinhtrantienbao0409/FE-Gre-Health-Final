@@ -1,3 +1,4 @@
+import AdminCreateUserPage from "pages/Admin/CreateUserPage";
 import UserProfile from "pages/Profile/UserProfile";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import HomePageLayout from "../layouts/HomePage";
@@ -21,6 +22,7 @@ const AppRouter = () => {
           <Route path="record" element={<ViewRecordPage />} />
           <Route path="profile" element={<UserProfile />} />
           <Route path="record/create" element={<CreateRecordPage />} />
+          <Route path="admin/create" element={<AdminCreateUserPage />} />
         </Route>
       </Routes>
     </BrowserRouter>
