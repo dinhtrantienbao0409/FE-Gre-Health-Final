@@ -7,8 +7,9 @@ export const loggedInSlice = createSlice({
     setLoggedInUser: (state, action) => {
       return action.payload;
     },
+    logout: (state, action) => (state = {}),
   },
 });
 
-export const { setLoggedInUser } = loggedInSlice.actions;
+export const { setLoggedInUser, logout } = loggedInSlice.actions;
 export default loggedInSlice.reducer;

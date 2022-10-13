@@ -8,7 +8,7 @@ const HomePageLayout = () => {
   const authLogin = useSelector((state) => state.auth);
   const location = useLocation();
 
-  return Object.keys(authLogin).length !== 0 ? (
+  return Object.keys(authLogin).includes("id") ? (
     <div>
       <NavBar />
       <Sidebar />
