@@ -2,14 +2,16 @@ import { Fragment, useState } from "react";
 import { Menu, Transition } from "@headlessui/react";
 import { ChevronDownIcon } from "@heroicons/react/20/solid";
 import { Link, useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import Dialog from "components/HomePage/Dialog";
+import { logout } from "slice/authSlice/logginSlice";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
 export default function CustomDropdown() {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const [dialog, setDialog] = useState({
     message: "",
@@ -43,6 +45,7 @@ export default function CustomDropdown() {
   const confirmLogout = (choose) => {
     if (choose) {
       localStorage.removeItem("access_token");
+      dispatch(logout(loggedInUser));
       navigate("/login");
       handleDialog("", false);
     } else {
