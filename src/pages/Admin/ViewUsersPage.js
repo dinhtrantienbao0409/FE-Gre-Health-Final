@@ -32,7 +32,7 @@ export default function AdminViewUserPage() {
         "🚀 ~ file: ViewUsersPage.js ~ line 28 ~ fetchUsers ~ response",
         response
       );
-      setUsers(response.data.docs);
+      setUsers(response.data);
     } catch (error) {
       console.log(
         "🚀 ~ file: ViewUsersPage.js ~ line 26 ~ fetchUsers ~ error",
@@ -42,7 +42,7 @@ export default function AdminViewUserPage() {
   };
 
   const handleClick = () => {
-    navigate("/home/admin/users/create");
+    navigate("/admin/createUser");
   };
 
   useEffect(() => {

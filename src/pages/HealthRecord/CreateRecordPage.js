@@ -1,10 +1,13 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 import { createRecordFunc } from "../../services/Record";
 import Footer from "../../components/LandingPage/Footer";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
+
+import { getUserProfile } from "services/Auth";
 
 const schemaValidation = yup.object().shape({
   name: yup.string().required(),
@@ -18,13 +21,34 @@ const schemaValidation = yup.object().shape({
 });
 
 export default function CreateRecordPage() {
+  const userId = useSelector((state) => state.auth.id);
+
   const navigate = useNavigate();
   const [error, setError] = useState("");
+  const [doctorProfile, setDoctorProfile] = useState();
+
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm({ resolver: yupResolver(schemaValidation) });
+
+  const fetchDoctorProfile = async () => {
+    try {
+      const response = await getUserProfile(userId);
+
+      setDoctorProfile(response.data);
+    } catch (error) {
+      console.log(
+        "🚀 ~ file: UserProfile.js ~ line 12 ~ fetchUserProfile ~ error",
+        error
+      );
+    }
+  };
+
+  useEffect(() => {
+    fetchDoctorProfile();
+  }, []);
 
   const handleCreateRecord = async (data) => {
     try {
@@ -75,258 +99,606 @@ export default function CreateRecordPage() {
             </p>
           </div>
           <div className="flex items-center my-4 before:flex-1 before:border-t before:border-gray-300 before:mt-0 after:flex-1 after:border-t after:border-gray-300 after:mt-0"></div>
-          <h1 className="mt-2 text-start text-xl font-extrabold text-gray-900">
-            Member Information
-          </h1>
+
           <form
             className="mt-8 space-y-6"
             // action="#"
             // method="POST"
             onSubmit={handleSubmit(handleCreateRecord)}
           >
-            <input type="hidden" name="remember" defaultValue="true" />
-            <div className="rounded-md shadow-sm -space-y-px gap-5">
-              <div className="flex space-x-4 my-4 mx-2">
-                <div className="w-1/2 flex flex-col item-start">
-                  <label
-                    className="flex item-start text-sm font-bold text-gray-600"
-                    htmlFor="name"
-                  >
-                    Full Name
-                  </label>
-                  <input
-                    id="name"
-                    name="name"
-                    type="text"
-                    className=" appearance-none rounded-md block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                    placeholder="Enter your fullname"
-                    {...register("name", { required: true })}
-                  />
-                  <div>
-                    {errors.name && (
-                      <span className="text-sm text-red-600">
-                        {errors?.name?.message}
-                      </span>
-                    )}
-                  </div>
-                </div>
-                <div className="w-1/2 flex flex-col item-start">
-                  <label
-                    className="flex item-start text-sm font-bold text-gray-600"
-                    htmlFor="gender"
-                  >
-                    Gender
-                  </label>
+            {doctorProfile && (
+              <div className="doctorInfo">
+                <h1 className="mt-2 text-start text-xl font-extrabold text-gray-900">
+                  Doctor Information
+                </h1>
+                <input type="hidden" name="remember" defaultValue="true" />
+                <div className="rounded-md shadow-sm -space-y-px gap-5">
+                  <div className="flex space-x-4 my-4 mx-2">
+                    <div className="w-1/2 flex flex-col item-start">
+                      <label
+                        className="flex item-start text-sm font-bold text-gray-600"
+                        htmlFor="name"
+                      >
+                        Full Name
+                      </label>
+                      <input
+                        id="name"
+                        name="name"
+                        type="text"
+                        className=" appearance-none rounded-md block w-full px-3 py-2 border border-gray-300 bg-gray-300 font-bold text-gray-600 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                        readOnly
+                        defaultValue={doctorProfile.name}
+                      />
+                    </div>
 
-                  <div className="flex flex-row space-x-8 mt-2">
-                    <div class="form-check">
-                      <input
-                        class="form-check-input appearance-none rounded-full h-4 w-4 border border-gray-300 bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer"
-                        type="radio"
-                        name="flexRadioDefault"
-                        id="flexRadioDefault1"
-                        value="male"
-                        {...register("gender", { required: true })}
-                      />
+                    <div className="w-1/4 flex flex-col item-start">
                       <label
-                        class="form-check-label inline-block text-gray-800"
-                        for="flexRadioDefault1"
+                        className="flex item-start text-sm font-bold text-gray-600"
+                        htmlFor="gender"
                       >
-                        Male
+                        Gender
                       </label>
+                      <input
+                        id="age"
+                        name="age"
+                        type="text"
+                        className=" appearance-none rounded-md  block w-full px-3 py-2 border border-gray-300 bg-gray-300 font-bold text-gray-600 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                        readOnly
+                        defaultValue={doctorProfile.gender}
+                      />
                     </div>
-                    <div class="form-check">
-                      <input
-                        class="form-check-input appearance-none rounded-full h-4 w-4 border border-gray-300 bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer"
-                        type="radio"
-                        name="flexRadioDefault"
-                        id="flexRadioDefault2"
-                        value="female"
-                        {...register("gender", { required: true })}
-                      />
+                    <div className="w-1/4 flex flex-col item-start">
                       <label
-                        class="form-check-label inline-block text-gray-800"
-                        for="flexRadioDefault2"
+                        className="flex item-start text-sm font-bold text-gray-600"
+                        htmlFor="date-of-birth"
                       >
-                        Female
+                        Date of Birth
                       </label>
-                    </div>
-                    <div class="form-check">
                       <input
-                        class="form-check-input appearance-none rounded-full h-4 w-4 border border-gray-300 bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer"
-                        type="radio"
-                        name="flexRadioDefault"
-                        id="flexRadioDefault2"
-                        {...register("gender", { required: true })}
+                        id="dateOfBirth"
+                        name="dateOfBirth"
+                        type="text"
+                        className=" appearance-none rounded-md  block w-full px-3 py-2 border border-gray-300 bg-gray-300 font-bold text-gray-600 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                        readOnly
+                        defaultValue={doctorProfile.dateOfBirth}
                       />
-                      <label
-                        class="form-check-label inline-block text-gray-800"
-                        for="flexRadioDefault2"
-                        value="other"
-                      >
-                        Other
-                      </label>
                     </div>
                   </div>
-                  <div>
-                    {errors.gender && (
-                      <span className="text-sm text-red-600">
-                        {errors?.gender?.message}
-                      </span>
-                    )}
+
+                  <div className="flex space-x-4 my-4 mx-2">
+                    <div className=" w-1/2 flex flex-col item-start">
+                      <label
+                        className="flex item-start text-sm font-bold text-gray-600"
+                        htmlFor="address"
+                      >
+                        Address
+                      </label>
+                      <input
+                        id="address"
+                        name="address"
+                        type="text"
+                        className=" appearance-none rounded-md  block w-full px-3 py-2 border border-gray-300 bg-gray-300 font-bold text-gray-600 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                        readOnly
+                        defaultValue={doctorProfile.address}
+                      />
+                    </div>
+
+                    <div className=" w-1/2 flex flex-col item-start">
+                      <label
+                        className="flex item-start text-sm font-bold text-gray-600"
+                        htmlFor="contact"
+                      >
+                        Phone number
+                      </label>
+                      <input
+                        id="contact"
+                        name="contact"
+                        type="text"
+                        className=" appearance-none rounded-md  block w-full px-3 py-2 border border-gray-300 bg-gray-300 font-bold text-gray-600 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                        readOnly
+                        defaultValue={doctorProfile.contact}
+                      />
+                    </div>
                   </div>
                 </div>
               </div>
-              <div className="flex space-x-4 my-2 mx-2">
-                <div className="w-1/2 flex flex-col item-start">
-                  <label
-                    className="flex item-start text-sm font-bold text-gray-600"
-                    htmlFor="date-of-birth"
-                  >
-                    Date of Birth
-                  </label>
-                  <input
-                    id="dateOfBirth"
-                    name="dateOfBirth"
-                    type="text"
-                    className=" appearance-none rounded-md  block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                    placeholder="Enter your date of birth"
-                    {...register("dateOfBirth", { required: true })}
-                  />
-                  <div>
-                    {errors.dateOfBirth && (
-                      <span className="text-sm text-red-600">
-                        {errors?.dateOfBirth?.message}
-                      </span>
-                    )}
+            )}
+
+            <div className="flex items-center my-4 before:flex-1 before:border-t before:border-gray-300 before:mt-0 after:flex-1 after:border-t after:border-gray-300 after:mt-0"></div>
+
+            <div className="userInfo">
+              <h1 className="mt-2 text-start text-xl font-extrabold text-gray-900">
+                Member Information
+              </h1>
+              <input type="hidden" name="remember" defaultValue="true" />
+              <div className="rounded-md shadow-sm -space-y-px gap-5">
+                <div className="flex space-x-4 my-4 mx-2">
+                  <div className="w-1/2 flex flex-col item-start">
+                    <label
+                      className="flex item-start text-sm font-bold text-gray-600"
+                      htmlFor="name"
+                    >
+                      Full Name
+                    </label>
+                    <input
+                      id="name"
+                      name="name"
+                      type="text"
+                      className=" appearance-none rounded-md block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                      placeholder="Enter your fullname"
+                      {...register("name", { required: true })}
+                    />
+                    <div>
+                      {errors.name && (
+                        <span className="text-sm text-red-600">
+                          {errors?.name?.message}
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                  <div className="w-1/2 flex flex-col item-start">
+                    <label
+                      className="flex item-start text-sm font-bold text-gray-600"
+                      htmlFor="gender"
+                    >
+                      Gender
+                    </label>
+
+                    <div className="flex flex-row space-x-8 mt-2">
+                      <div class="form-check">
+                        <input
+                          class="form-check-input appearance-none rounded-full h-4 w-4 border border-gray-300 bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer"
+                          type="radio"
+                          name="flexRadioDefault"
+                          id="flexRadioDefault1"
+                          value="male"
+                          {...register("gender", { required: true })}
+                        />
+                        <label
+                          class="form-check-label inline-block text-gray-800"
+                          for="flexRadioDefault1"
+                        >
+                          Male
+                        </label>
+                      </div>
+                      <div class="form-check">
+                        <input
+                          class="form-check-input appearance-none rounded-full h-4 w-4 border border-gray-300 bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer"
+                          type="radio"
+                          name="flexRadioDefault"
+                          id="flexRadioDefault2"
+                          value="female"
+                          {...register("gender", { required: true })}
+                        />
+                        <label
+                          class="form-check-label inline-block text-gray-800"
+                          for="flexRadioDefault2"
+                        >
+                          Female
+                        </label>
+                      </div>
+                      <div class="form-check">
+                        <input
+                          class="form-check-input appearance-none rounded-full h-4 w-4 border border-gray-300 bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer"
+                          type="radio"
+                          name="flexRadioDefault"
+                          id="flexRadioDefault2"
+                          {...register("gender", { required: true })}
+                        />
+                        <label
+                          class="form-check-label inline-block text-gray-800"
+                          for="flexRadioDefault2"
+                          value="other"
+                        >
+                          Other
+                        </label>
+                      </div>
+                    </div>
+                    <div>
+                      {errors.gender && (
+                        <span className="text-sm text-red-600">
+                          {errors?.gender?.message}
+                        </span>
+                      )}
+                    </div>
                   </div>
                 </div>
-                <div className="w-1/2 flex flex-col item-start">
-                  <label
-                    className="flex item-start text-sm font-bold text-gray-600"
-                    htmlFor="age"
-                  >
-                    Age
-                  </label>
-                  <input
-                    id="age"
-                    name="age"
-                    type="text"
-                    className=" appearance-none rounded-md  block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                    {...register("age", { required: true })}
-                  />
-                  <div>
-                    {errors.age && (
-                      <span className="text-sm text-red-600">
-                        {errors?.age?.message}
-                      </span>
-                    )}
+                <div className="flex space-x-4 my-2 mx-2">
+                  <div className="w-1/2 flex flex-col item-start">
+                    <label
+                      className="flex item-start text-sm font-bold text-gray-600"
+                      htmlFor="date-of-birth"
+                    >
+                      Date of Birth
+                    </label>
+                    <input
+                      id="dateOfBirth"
+                      name="dateOfBirth"
+                      type="text"
+                      className=" appearance-none rounded-md  block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                      placeholder="Enter your date of birth"
+                      {...register("dateOfBirth", { required: true })}
+                    />
+                    <div>
+                      {errors.dateOfBirth && (
+                        <span className="text-sm text-red-600">
+                          {errors?.dateOfBirth?.message}
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                  <div className="w-1/2 flex flex-col item-start">
+                    <label
+                      className="flex item-start text-sm font-bold text-gray-600"
+                      htmlFor="age"
+                    >
+                      Age
+                    </label>
+                    <input
+                      id="age"
+                      name="age"
+                      type="text"
+                      className=" appearance-none rounded-md  block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                      {...register("age", { required: true })}
+                    />
+                    <div>
+                      {errors.age && (
+                        <span className="text-sm text-red-600">
+                          {errors?.age?.message}
+                        </span>
+                      )}
+                    </div>
                   </div>
                 </div>
+                <div className="flex space-x-4 my-4 mx-2">
+                  <div className="my-4 w-1/2 flex flex-col item-start">
+                    <label
+                      className="flex item-start text-sm font-bold text-gray-600"
+                      htmlFor="address"
+                    >
+                      Address
+                    </label>
+                    <input
+                      id="address"
+                      name="address"
+                      type="text"
+                      className=" appearance-none rounded-md  block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                      placeholder="Enter your address"
+                      {...register("address", { required: true })}
+                    />
+                    <div>
+                      {errors.address && (
+                        <span className="text-sm text-red-600">
+                          {errors?.address?.message}
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                  <div className=" my-4 w-1/2 flex flex-col item-start">
+                    <label
+                      className="flex item-start text-sm font-bold text-gray-600"
+                      htmlFor="contact"
+                    >
+                      Phone number
+                    </label>
+                    <input
+                      id="contact"
+                      name="contact"
+                      type="text"
+                      className=" appearance-none rounded-md  block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                      placeholder="Enter your phone number"
+                      {...register("contact", { required: true })}
+                    />
+                    <div>
+                      {errors.contact && (
+                        <span className="text-sm text-red-600">
+                          {errors?.contact?.message}
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                </div>
+                {/* <div className="flex flex-col mx-2 ">
+                  <div className="my-4 w-2/3 flex flex-col item-start">
+                    <label
+                      className="flex item-start text-sm font-bold text-gray-600"
+                      htmlFor="address"
+                    >
+                      Address
+                    </label>
+                    <input
+                      id="address"
+                      name="address"
+                      type="text"
+                      className=" appearance-none rounded-md  block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                      placeholder="Enter your address"
+                      {...register("address", { required: true })}
+                    />
+                    <div>
+                      {errors.address && (
+                        <span className="text-sm text-red-600">
+                          {errors?.address?.message}
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                  <div className=" w-2/3 flex flex-col item-start">
+                    <label
+                      className="flex item-start text-sm font-bold text-gray-600"
+                      htmlFor="contact"
+                    >
+                      Phone number
+                    </label>
+                    <input
+                      id="contact"
+                      name="contact"
+                      type="text"
+                      className=" appearance-none rounded-md  block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                      placeholder="Enter your phone number"
+                      {...register("contact", { required: true })}
+                    />
+                    <div>
+                      {errors.contact && (
+                        <span className="text-sm text-red-600">
+                          {errors?.contact?.message}
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                  <div className="my-4 w-2/3 flex flex-col item-start">
+                    <label
+                      className="flex item-start text-sm font-bold text-gray-600"
+                      htmlFor="healthCondition"
+                    >
+                      Health Condition
+                    </label>
+                    <input
+                      id="healthCondition"
+                      name="healthCondition"
+                      type="text"
+                      className=" appearance-none rounded-md  block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                      placeholder=""
+                      {...register("healthCondition", { required: true })}
+                    />
+                    <div>
+                      {errors.healthCondition && (
+                        <span className="text-sm text-red-600">
+                          {errors?.healthCondition?.message}
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                  <div className=" w-2/3 flex flex-col item-start">
+                    <label
+                      className="flex item-start text-sm font-bold text-gray-600"
+                      htmlFor="doctorSuggestion"
+                    >
+                      Doctor Suggestion
+                    </label>
+                    <input
+                      id="doctorSuggestion"
+                      name="doctorSuggestion"
+                      type="text"
+                      className=" appearance-none rounded-md  block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                      placeholder=""
+                      {...register("doctorSuggestion", { required: true })}
+                    />
+                    <div>
+                      {errors.doctorSuggestion && (
+                        <span className="text-sm text-red-600">
+                          {errors?.doctorSuggestion?.message}
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                </div> */}
               </div>
-              <div className="flex flex-col mx-2 ">
-                <div className="my-4 w-2/3 flex flex-col item-start">
-                  <label
-                    className="flex item-start text-sm font-bold text-gray-600"
-                    htmlFor="address"
-                  >
-                    Address
-                  </label>
-                  <input
-                    id="address"
-                    name="address"
-                    type="text"
-                    className=" appearance-none rounded-md  block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                    placeholder="Enter your address"
-                    {...register("address", { required: true })}
-                  />
-                  <div>
-                    {errors.address && (
-                      <span className="text-sm text-red-600">
-                        {errors?.address?.message}
-                      </span>
-                    )}
+            </div>
+
+            <div className="flex items-center my-4 before:flex-1 before:border-t before:border-gray-300 before:mt-0 after:flex-1 after:border-t after:border-gray-300 after:mt-0"></div>
+
+            <div className="claimInfo">
+              <h1 className="mt-2 text-start text-xl font-extrabold text-gray-900">
+                Claim Information
+              </h1>
+              <input type="hidden" name="remember" defaultValue="true" />
+              <div className="rounded-md shadow-sm -space-y-px gap-5">
+                <div className="flex space-x-4 my-4 mx-2">
+                  <div className="w-1/2 flex flex-col item-start">
+                    <label
+                      className="flex item-start text-sm font-bold text-gray-600"
+                      htmlFor="date-of-birth"
+                    >
+                      Blood type
+                    </label>
+                    <input
+                      id="bloodType"
+                      name="bloodType"
+                      type="text"
+                      className=" appearance-none rounded-md  block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                      // {...register("dateOfBirth", { required: true })}
+                    />
+                    {/* <div>
+                      {errors.dateOfBirth && (
+                        <span className="text-sm text-red-600">
+                          {errors?.dateOfBirth?.message}
+                        </span>
+                      )}
+                    </div> */}
+                  </div>
+                  <div className="w-1/2 flex flex-col item-start">
+                    <label
+                      className="flex item-start text-sm font-bold text-gray-600"
+                      htmlFor="age"
+                    >
+                      BMI
+                    </label>
+                    <input
+                      id="bmi"
+                      name="bmi"
+                      type="text"
+                      className=" appearance-none rounded-md  block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                      // {...register("age", { required: true })}
+                    />
+                    {/* <div>
+                      {errors.age && (
+                        <span className="text-sm text-red-600">
+                          {errors?.age?.message}
+                        </span>
+                      )}
+                    </div> */}
                   </div>
                 </div>
-                <div className=" w-2/3 flex flex-col item-start">
-                  <label
-                    className="flex item-start text-sm font-bold text-gray-600"
-                    htmlFor="contact"
-                  >
-                    Phone number
-                  </label>
-                  <input
-                    id="contact"
-                    name="contact"
-                    type="text"
-                    className=" appearance-none rounded-md  block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                    placeholder="Enter your phone number"
-                    {...register("contact", { required: true })}
-                  />
-                  <div>
-                    {errors.contact && (
-                      <span className="text-sm text-red-600">
-                        {errors?.contact?.message}
-                      </span>
-                    )}
+                <div className="flex space-x-4 my-4 mx-2">
+                  <div className=" w-1/2 flex flex-col item-start">
+                    <label
+                      className="flex item-start text-sm font-bold text-gray-600"
+                      htmlFor="address"
+                    >
+                      Height
+                    </label>
+                    <input
+                      id="height"
+                      name="height"
+                      type="text"
+                      className=" appearance-none rounded-md  block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                      // {...register("address", { required: true })}
+                    />
+                    {/* <div>
+                      {errors.address && (
+                        <span className="text-sm text-red-600">
+                          {errors?.address?.message}
+                        </span>
+                      )}
+                    </div> */}
                   </div>
-                </div>
-                <div className="my-4 w-2/3 flex flex-col item-start">
-                  <label
-                    className="flex item-start text-sm font-bold text-gray-600"
-                    htmlFor="healthCondition"
-                  >
-                    Health Condition
-                  </label>
-                  <input
-                    id="healthCondition"
-                    name="healthCondition"
-                    type="text"
-                    className=" appearance-none rounded-md  block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                    placeholder=""
-                    {...register("healthCondition", { required: true })}
-                  />
-                  <div>
-                    {errors.healthCondition && (
-                      <span className="text-sm text-red-600">
-                        {errors?.healthCondition?.message}
-                      </span>
-                    )}
-                  </div>
-                </div>
-                <div className=" w-2/3 flex flex-col item-start">
-                  <label
-                    className="flex item-start text-sm font-bold text-gray-600"
-                    htmlFor="doctorSuggestion"
-                  >
-                    Doctor Suggestion
-                  </label>
-                  <input
-                    id="doctorSuggestion"
-                    name="doctorSuggestion"
-                    type="text"
-                    className=" appearance-none rounded-md  block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                    placeholder=""
-                    {...register("doctorSuggestion", { required: true })}
-                  />
-                  <div>
-                    {errors.doctorSuggestion && (
-                      <span className="text-sm text-red-600">
-                        {errors?.doctorSuggestion?.message}
-                      </span>
-                    )}
+                  <div className=" w-1/2 flex flex-col item-start">
+                    <label
+                      className="flex item-start text-sm font-bold text-gray-600"
+                      htmlFor="contact"
+                    >
+                      Weight
+                    </label>
+                    <input
+                      id="weight"
+                      name="weight"
+                      type="text"
+                      className=" appearance-none rounded-md  block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                      // {...register("contact", { required: true })}
+                    />
+                    {/* <div>
+                      {errors.contact && (
+                        <span className="text-sm text-red-600">
+                          {errors?.contact?.message}
+                        </span>
+                      )}
+                    </div> */}
                   </div>
                 </div>
               </div>
             </div>
+
             <div className="flex items-center my-4 before:flex-1 before:border-t before:border-gray-300 before:mt-0 after:flex-1 after:border-t after:border-gray-300 after:mt-0"></div>
-            <h1 className="mt-2 text-start text-xl font-extrabold text-gray-900">
-              Claim Information
-            </h1>
-            <div className="flex items-center my-4 before:flex-1 before:border-t before:border-gray-300 before:mt-0 after:flex-1 after:border-t after:border-gray-300 after:mt-0"></div>
-            <h1 className="mt-2 text-start text-xl font-extrabold text-gray-900">
-              Medical Data
-            </h1>
+
+            <div className="medicalPlan">
+              <h1 className="mt-2 text-start text-xl font-extrabold text-gray-900">
+                Medical Plan
+              </h1>
+              <input type="hidden" name="remember" defaultValue="true" />
+              <div className=" rounded-md shadow-sm -space-y-px gap-5">
+                <div className="my-4 flex flex-col">
+                  <div className=" w-2/3 flex flex-col item-start">
+                    <label
+                      className="flex item-start text-sm font-bold text-gray-600"
+                      htmlFor="date-of-birth"
+                    >
+                      Disease symptoms
+                    </label>
+                    <input
+                      id="disease-symptoms"
+                      name="disease-symptoms"
+                      type="text"
+                      className=" appearance-none rounded-md  block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                      // {...register("dateOfBirth", { required: true })}
+                    />
+                    {/* <div>
+                      {errors.dateOfBirth && (
+                        <span className="text-sm text-red-600">
+                          {errors?.dateOfBirth?.message}
+                        </span>
+                      )}
+                    </div> */}
+                  </div>
+                  <div className="my-4 w-2/3 flex flex-col item-start">
+                    <label
+                      className="flex item-start text-sm font-bold text-gray-600"
+                      htmlFor="date-of-birth"
+                    >
+                      Treatment plan
+                    </label>
+                    <input
+                      id="treatment-plan"
+                      name="treatment-plan"
+                      type="text"
+                      className=" appearance-none rounded-md  block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                      // {...register("dateOfBirth", { required: true })}
+                    />
+                    {/* <div>
+                      {errors.dateOfBirth && (
+                        <span className="text-sm text-red-600">
+                          {errors?.dateOfBirth?.message}
+                        </span>
+                      )}
+                    </div> */}
+                  </div>
+                  <div className="w-2/3 flex flex-col item-start">
+                    <label
+                      className="flex item-start text-sm font-bold text-gray-600"
+                      htmlFor="date-of-birth"
+                    >
+                      Prescribed medication
+                    </label>
+                    <input
+                      id="prescribed-medication"
+                      name="prescribed-medication"
+                      type="text"
+                      className=" appearance-none rounded-md  block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                      // {...register("dateOfBirth", { required: true })}
+                    />
+                    {/* <div>
+                      {errors.dateOfBirth && (
+                        <span className="text-sm text-red-600">
+                          {errors?.dateOfBirth?.message}
+                        </span>
+                      )}
+                    </div> */}
+                  </div>
+                  <div className="my-4 w-2/3 flex flex-col item-start">
+                    <label
+                      className="flex item-start text-sm font-bold text-gray-600"
+                      htmlFor="date-of-birth"
+                    >
+                      Doctor suggestion
+                    </label>
+                    <input
+                      id="doctor-suggestion"
+                      name="doctor-suggestion"
+                      type="text"
+                      className=" appearance-none rounded-md  block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                      // {...register("dateOfBirth", { required: true })}
+                    />
+                    {/* <div>
+                      {errors.dateOfBirth && (
+                        <span className="text-sm text-red-600">
+                          {errors?.dateOfBirth?.message}
+                        </span>
+                      )}
+                    </div> */}
+                  </div>
+                </div>
+              </div>
+            </div>
+
             <div className="flex items-center my-4 before:flex-1 before:border-t before:border-gray-300 before:mt-0 after:flex-1 after:border-t after:border-gray-300 after:mt-0"></div>
 
             <div>

@@ -4,8 +4,12 @@ import { getUserProfile } from "services/Auth";
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
 
-export default function UserProfile() {
+export default function DoctorProfile() {
   const userId = useSelector((state) => state.auth.id);
+  console.log(
+    "🚀 ~ file: UserProfile.js ~ line 9 ~ UserProfile ~ userId",
+    userId
+  );
 
   const [profiles, setProfile] = useState();
 
@@ -23,7 +27,10 @@ export default function UserProfile() {
   };
 
   useEffect(() => {
+    //logic
+    console.log(">>>>>");
     const data = fetchUserProfile();
+    console.log("🚀 ~ file: UserProfile.js ~ line 34 ~ useEffect ~ data", data);
   }, []);
 
   return (

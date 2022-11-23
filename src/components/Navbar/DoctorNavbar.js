@@ -1,14 +1,14 @@
+import LogoForDoctor from "components/NavbarLogo/LogoForDoctor";
 import React, { useState } from "react";
-import Logo from "../NavbarLogo/Logo";
-import CustomDropdown from "./CustomDropdown";
-import SearchField from "./SearchField";
+import CustomDropdown from "../HomePage/CustomDropdown";
+import SearchField from "../HomePage/SearchField";
 
-const NavBar = () => {
+export default function DoctorNavbar() {
   const [open, setOpen] = useState(false);
   return (
     <div className="shadow-md w-full fixed top-0 left-0">
       <div className="md:flex items-center justify-between bg-gray-800 py-4 md:px-10 px-7 h-[80px]">
-        <Logo />
+        <LogoForDoctor />
         <SearchField />
         <div className="rounded-full bg-gray-600 px-4 py-2 ">
           <div
@@ -29,5 +29,4 @@ const NavBar = () => {
       </div>
     </div>
   );
-};
-export default NavBar;
+}

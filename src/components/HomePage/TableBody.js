@@ -2,8 +2,7 @@ import "App.css";
 import { useEffect, useState } from "react";
 import ReactPaginate from "react-paginate";
 
-export default function TableBody(props) {
-  const { data } = props;
+export default function TableBody({ data }) {
   const [currentItems, setCurrentItems] = useState([]);
   const [pageCount, setPageCount] = useState(0);
   const [itemOffset, setItemOffset] = useState(0);

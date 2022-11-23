@@ -1,17 +1,17 @@
-// import Footer from "../components/LandingPage/Footer";
-import NavBar from "../components/HomePage/Navbar";
 import Sidebar from "../components/HomePage/Sidebar";
 import { Outlet, Navigate, useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
+import ReceptionNavbar from "components/Navbar/ReceptionNavbar";
 
-const HomePageLayout = () => {
+export default function ReceptionLayout() {
   const authLogin = useSelector((state) => state.auth);
   // const userRole = useSelector((state) => state.auth.role);
+
   const location = useLocation();
 
-  return Object.keys(authLogin).includes("id") && { userRole: "user" } ? (
+  return Object.keys(authLogin).includes("id") ? (
     <div>
-      <NavBar />
+      <ReceptionNavbar />
       <Sidebar />
       <Outlet />
       {/* <div>
@@ -21,6 +21,4 @@ const HomePageLayout = () => {
   ) : (
     <Navigate to="/login" replace state={{ from: location }} />
   );
-};
-
-export default HomePageLayout;
+}

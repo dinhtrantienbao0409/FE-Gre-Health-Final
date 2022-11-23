@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import NavLink from "./NavLink";
 import { NavData } from "../../layoutData/LandingPageData";
-import Logo from "../Logo";
+import Logo from "../NavbarLogo/Logo";
 
 const NavBar = () => {
   const [open, setOpen] = useState(false);
