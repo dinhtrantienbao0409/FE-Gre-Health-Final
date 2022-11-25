@@ -25,7 +25,7 @@ const Sidebar = () => {
         }`}
       >
         {SidebarData.map((item) => (
-          <SideLink path={item.path} name={item.name} />
+          <SideLink path={item.path} name={item.name} key={item.name} />
         ))}
       </div>
     </div>
