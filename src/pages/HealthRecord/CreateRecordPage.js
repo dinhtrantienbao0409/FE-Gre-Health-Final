@@ -11,14 +11,8 @@ import { getUserProfile } from "services/Auth";
 import { getFormById } from "services/Form";
 
 const schemaValidation = yup.object().shape({
-  name: yup.string().required(),
-  gender: yup.string().required(),
-  dateOfBirth: yup.string().required(),
-  address: yup.string().required(),
-  age: yup.string().required(),
-  contact: yup.string().required(),
-  healthCondition: yup.string().required(),
-  doctorSuggestion: yup.string().required(),
+  diagnosis: yup.string().required(),
+  treatmentPlan: yup.string().required(),
 });
 
 export default function CreateRecordPage() {
@@ -27,8 +21,16 @@ export default function CreateRecordPage() {
   const navigate = useNavigate();
   const [error, setError] = useState("");
   const [doctorProfile, setDoctorProfile] = useState();
+  console.log(
+    "🚀 ~ file: CreateRecordPage.js ~ line 24 ~ CreateRecordPage ~ doctorProfile",
+    doctorProfile
+  );
 
   const [formData, setFormData] = useState();
+  console.log(
+    "🚀 ~ file: CreateRecordPage.js ~ line 32 ~ CreateRecordPage ~ formData",
+    formData
+  );
 
   const {
     register,
@@ -69,24 +71,30 @@ export default function CreateRecordPage() {
   const handleCreateRecord = async (data) => {
     try {
       const {
-        name,
-        gender,
-        dateOfBirth,
-        address,
-        age,
-        contact,
-        healthCondition,
-        doctorSuggestion,
+        doctorName,
+        doctorEmail,
+        doctorAddress,
+        doctorContact,
+        username,
+        userGender,
+        userDateOfBirth,
+        userAddress,
+        userContact,
+        diagnosis,
+        treatmentPlan,
       } = data;
       const payload = {
-        name,
-        gender,
-        dateOfBirth,
-        address,
-        age,
-        contact,
-        healthCondition,
-        doctorSuggestion,
+        doctorName,
+        doctorEmail,
+        doctorAddress,
+        doctorContact,
+        username,
+        userGender,
+        userDateOfBirth,
+        userAddress,
+        userContact,
+        diagnosis,
+        treatmentPlan,
       };
       console.log(
         "🚀 ~ file: CreateRecordPage.js ~ line 38 ~ CreateRecordPage ~ payload",
@@ -107,7 +115,7 @@ export default function CreateRecordPage() {
         <div className=" p-10 shadow-xl   w-full space-y-8 gap-5 rounded-lg">
           <div>
             <h1 className="mt-2 text-start text-3xl font-extrabold text-gray-900">
-              Dental Medical Record
+              Consultation Form for member to receive Dental Health Care.
             </h1>
             <p className=" text-gray-500 text-start text-sm">
               Lorem ipsum dolor sit amet consect adipisicing elit. Possimus
@@ -125,7 +133,7 @@ export default function CreateRecordPage() {
             {doctorProfile && (
               <div className="doctorInfo">
                 <h1 className="mt-2 text-start text-xl font-extrabold text-gray-900">
-                  Doctor Information
+                  Dentist Information
                 </h1>
                 <input type="hidden" name="remember" defaultValue="true" />
                 <div className="rounded-md shadow-sm -space-y-px gap-5">
@@ -147,22 +155,6 @@ export default function CreateRecordPage() {
                       />
                     </div>
 
-                    <div className="w-1/2 flex flex-col item-start">
-                      <label
-                        className="flex item-start text-sm font-bold text-gray-600"
-                        htmlFor="gender"
-                      >
-                        Gender
-                      </label>
-                      <input
-                        id="age"
-                        name="age"
-                        type="text"
-                        className=" appearance-none rounded-md  block w-full px-3 py-2 border border-gray-300 bg-gray-300 font-bold text-gray-600 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                        readOnly
-                        defaultValue={doctorProfile.gender}
-                      />
-                    </div>
                     <div className="w-1/2 flex flex-col item-start">
                       <label
                         className="flex item-start text-sm font-bold text-gray-600"
@@ -298,7 +290,7 @@ export default function CreateRecordPage() {
                         readOnly
                       />
                     </div>
-                    <div className="w-1/2 flex flex-col item-start">
+                    <div className=" mb-4 w-1/2 flex flex-col item-start">
                       <label
                         className="flex item-start text-sm font-bold text-gray-600"
                         htmlFor="contact"
@@ -316,237 +308,59 @@ export default function CreateRecordPage() {
                       />
                     </div>
                   </div>
-                  {/* <div className="flex flex-col mx-2 ">
-                  <div className="my-4 w-2/3 flex flex-col item-start">
+                  <div className="my-4 mx-2 w-2/3 flex flex-col item-start">
                     <label
                       className="flex item-start text-sm font-bold text-gray-600"
-                      htmlFor="address"
+                      htmlFor="date-of-birth"
                     >
-                      Address
+                      Dental symptoms
                     </label>
-                    <input
-                      id="address"
-                      name="address"
+
+                    <textarea
+                      id="disease-symptoms"
+                      name="disease-symptoms"
                       type="text"
-                      className=" appearance-none rounded-md  block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                      placeholder="Enter your address"
-                      {...register("address", { required: true })}
-                    />
-                    <div>
-                      {errors.address && (
-                        <span className="text-sm text-red-600">
-                          {errors?.address?.message}
-                        </span>
-                      )}
-                    </div>
+                      className="bg-gray-300 appearance-none rounded-md  block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 font-bold text-gray-600 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                      rows="5"
+                      readOnly
+                      defaultValue={formData.diseaseSymptoms}
+                    ></textarea>
                   </div>
-                  <div className=" w-2/3 flex flex-col item-start">
-                    <label
-                      className="flex item-start text-sm font-bold text-gray-600"
-                      htmlFor="contact"
-                    >
-                      Phone number
-                    </label>
-                    <input
-                      id="contact"
-                      name="contact"
-                      type="text"
-                      className=" appearance-none rounded-md  block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                      placeholder="Enter your phone number"
-                      {...register("contact", { required: true })}
-                    />
-                    <div>
-                      {errors.contact && (
-                        <span className="text-sm text-red-600">
-                          {errors?.contact?.message}
-                        </span>
-                      )}
-                    </div>
-                  </div>
-                  <div className="my-4 w-2/3 flex flex-col item-start">
-                    <label
-                      className="flex item-start text-sm font-bold text-gray-600"
-                      htmlFor="healthCondition"
-                    >
-                      Health Condition
-                    </label>
-                    <input
-                      id="healthCondition"
-                      name="healthCondition"
-                      type="text"
-                      className=" appearance-none rounded-md  block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                      placeholder=""
-                      {...register("healthCondition", { required: true })}
-                    />
-                    <div>
-                      {errors.healthCondition && (
-                        <span className="text-sm text-red-600">
-                          {errors?.healthCondition?.message}
-                        </span>
-                      )}
-                    </div>
-                  </div>
-                  <div className=" w-2/3 flex flex-col item-start">
-                    <label
-                      className="flex item-start text-sm font-bold text-gray-600"
-                      htmlFor="doctorSuggestion"
-                    >
-                      Doctor Suggestion
-                    </label>
-                    <input
-                      id="doctorSuggestion"
-                      name="doctorSuggestion"
-                      type="text"
-                      className=" appearance-none rounded-md  block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                      placeholder=""
-                      {...register("doctorSuggestion", { required: true })}
-                    />
-                    <div>
-                      {errors.doctorSuggestion && (
-                        <span className="text-sm text-red-600">
-                          {errors?.doctorSuggestion?.message}
-                        </span>
-                      )}
-                    </div>
-                  </div>
-                </div> */}
                 </div>
               </div>
             )}
 
             <div className="flex items-center my-4 before:flex-1 before:border-t before:border-gray-300 before:mt-0 after:flex-1 after:border-t after:border-gray-300 after:mt-0"></div>
 
-            <div className="claimInfo">
-              <h1 className="mt-2 text-start text-xl font-extrabold text-gray-900">
-                Claim Information
-              </h1>
-              <input type="hidden" name="remember" defaultValue="true" />
-              <div className="rounded-md shadow-sm -space-y-px gap-5">
-                <div className="flex space-x-4 my-4 mx-2">
-                  <div className="w-1/2 flex flex-col item-start">
-                    <label
-                      className="flex item-start text-sm font-bold text-gray-600"
-                      htmlFor="date-of-birth"
-                    >
-                      Blood type
-                    </label>
-                    <input
-                      id="bloodType"
-                      name="bloodType"
-                      type="text"
-                      className=" appearance-none rounded-md  block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                      // {...register("dateOfBirth", { required: true })}
-                    />
-                    {/* <div>
-                      {errors.dateOfBirth && (
-                        <span className="text-sm text-red-600">
-                          {errors?.dateOfBirth?.message}
-                        </span>
-                      )}
-                    </div> */}
-                  </div>
-                  <div className="w-1/2 flex flex-col item-start">
-                    <label
-                      className="flex item-start text-sm font-bold text-gray-600"
-                      htmlFor="age"
-                    >
-                      BMI
-                    </label>
-                    <input
-                      id="bmi"
-                      name="bmi"
-                      type="text"
-                      className=" appearance-none rounded-md  block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                      // {...register("age", { required: true })}
-                    />
-                    {/* <div>
-                      {errors.age && (
-                        <span className="text-sm text-red-600">
-                          {errors?.age?.message}
-                        </span>
-                      )}
-                    </div> */}
-                  </div>
-                </div>
-                <div className="flex space-x-4 my-4 mx-2">
-                  <div className=" w-1/2 flex flex-col item-start">
-                    <label
-                      className="flex item-start text-sm font-bold text-gray-600"
-                      htmlFor="address"
-                    >
-                      Height
-                    </label>
-                    <input
-                      id="height"
-                      name="height"
-                      type="text"
-                      className=" appearance-none rounded-md  block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                      // {...register("address", { required: true })}
-                    />
-                    {/* <div>
-                      {errors.address && (
-                        <span className="text-sm text-red-600">
-                          {errors?.address?.message}
-                        </span>
-                      )}
-                    </div> */}
-                  </div>
-                  <div className=" w-1/2 flex flex-col item-start">
-                    <label
-                      className="flex item-start text-sm font-bold text-gray-600"
-                      htmlFor="contact"
-                    >
-                      Weight
-                    </label>
-                    <input
-                      id="weight"
-                      name="weight"
-                      type="text"
-                      className=" appearance-none rounded-md  block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                      // {...register("contact", { required: true })}
-                    />
-                    {/* <div>
-                      {errors.contact && (
-                        <span className="text-sm text-red-600">
-                          {errors?.contact?.message}
-                        </span>
-                      )}
-                    </div> */}
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div className="flex items-center my-4 before:flex-1 before:border-t before:border-gray-300 before:mt-0 after:flex-1 after:border-t after:border-gray-300 after:mt-0"></div>
-
             <div className="medicalPlan">
               <h1 className="mt-2 text-start text-xl font-extrabold text-gray-900">
-                Medical Plan
+                DENTIST'S REPORT
               </h1>
               <input type="hidden" name="remember" defaultValue="true" />
               <div className=" rounded-md shadow-sm -space-y-px gap-5">
-                <div className="my-4 flex flex-col">
+                <div className="my-4 mx-2 flex flex-col">
                   <div className=" w-2/3 flex flex-col item-start">
                     <label
                       className="flex item-start text-sm font-bold text-gray-600"
                       htmlFor="date-of-birth"
                     >
-                      Disease symptoms
+                      Diagnosis of Dentist
                     </label>
-                    <input
-                      id="disease-symptoms"
-                      name="disease-symptoms"
+
+                    <textarea
+                      id="diagnosis"
                       type="text"
                       className=" appearance-none rounded-md  block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                      // {...register("dateOfBirth", { required: true })}
+                      rows="5"
+                      {...register("diagnosis", { required: true })}
                     />
-                    {/* <div>
-                      {errors.dateOfBirth && (
+                    <div>
+                      {errors.diagnosis && (
                         <span className="text-sm text-red-600">
-                          {errors?.dateOfBirth?.message}
+                          {errors?.diagnosis?.message}
                         </span>
                       )}
-                    </div> */}
+                    </div>
                   </div>
                   <div className="my-4 w-2/3 flex flex-col item-start">
                     <label
@@ -555,64 +369,21 @@ export default function CreateRecordPage() {
                     >
                       Treatment plan
                     </label>
-                    <input
-                      id="treatment-plan"
-                      name="treatment-plan"
+
+                    <textarea
+                      id="treatmentPlan"
                       type="text"
                       className=" appearance-none rounded-md  block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                      // {...register("dateOfBirth", { required: true })}
+                      rows="5"
+                      {...register("treatmentPlan", { required: true })}
                     />
-                    {/* <div>
-                      {errors.dateOfBirth && (
+                    <div>
+                      {errors.treatmentPlan && (
                         <span className="text-sm text-red-600">
-                          {errors?.dateOfBirth?.message}
+                          {errors?.treatmentPlan?.message}
                         </span>
                       )}
-                    </div> */}
-                  </div>
-                  <div className="w-2/3 flex flex-col item-start">
-                    <label
-                      className="flex item-start text-sm font-bold text-gray-600"
-                      htmlFor="date-of-birth"
-                    >
-                      Prescribed medication
-                    </label>
-                    <input
-                      id="prescribed-medication"
-                      name="prescribed-medication"
-                      type="text"
-                      className=" appearance-none rounded-md  block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                      // {...register("dateOfBirth", { required: true })}
-                    />
-                    {/* <div>
-                      {errors.dateOfBirth && (
-                        <span className="text-sm text-red-600">
-                          {errors?.dateOfBirth?.message}
-                        </span>
-                      )}
-                    </div> */}
-                  </div>
-                  <div className="my-4 w-2/3 flex flex-col item-start">
-                    <label
-                      className="flex item-start text-sm font-bold text-gray-600"
-                      htmlFor="date-of-birth"
-                    >
-                      Doctor suggestion
-                    </label>
-                    <input
-                      id="doctor-suggestion"
-                      name="doctor-suggestion"
-                      type="text"
-                      className=" appearance-none rounded-md  block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                      // {...register("dateOfBirth", { required: true })}
-                    />
-                    {/* <div>
-                      {errors.dateOfBirth && (
-                        <span className="text-sm text-red-600">
-                          {errors?.dateOfBirth?.message}
-                        </span>
-                      )}
-                    </div> */}
+                    </div>
                   </div>
                 </div>
               </div>
@@ -625,7 +396,7 @@ export default function CreateRecordPage() {
                 type="submit"
                 className="w-1/4 mx-2 group  w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-cyan-500 hover:bg-cyan-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-400"
               >
-                Submit
+                Create
               </button>
             </div>
           </form>

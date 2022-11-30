@@ -22,25 +22,47 @@ const Login = () => {
     formState: { errors },
   } = useForm({ resolver: yupResolver(schemaValidation) });
 
+  const renderRoute = (isLoggedIn, userRole) => {
+    if (isLoggedIn) {
+      switch (userRole) {
+        case "admin":
+          navigate("/admin");
+          break;
+        case "doctor":
+          navigate("/doctor");
+          break;
+        case "receptionist":
+          navigate("/receptionist");
+          break;
+        case "user":
+          navigate("/home");
+          break;
+      }
+    }
+  };
+
   const handleLogin = async (data) => {
-    console.log("🚀 ~ file: Login.js ~ line 26 ~ handleLogin ~ data", data);
     try {
       const { email, password } = data;
       const payload = {
         email,
         password,
       };
-      console.log(
-        "🚀 ~ file: Login.js ~ line 30 ~ handleLogin ~ payload",
-        payload
-      );
       const response = await loginFunc(payload);
+      console.log(
+        "🚀 ~ file: LoginPage.js ~ line 33 ~ handleLogin ~ response",
+        response
+      );
       const { token, payload: loggedInUser } = response.data;
       dispatch(setLoggedInUser(loggedInUser));
 
       if (!token) return;
       localStorage.setItem("access_token", token);
-      navigate("/home");
+
+      if (localStorage.getItem("access_token")) {
+        renderRoute(true, response.data.payload.role);
+      }
+      // navigate("/home");
     } catch (error) {
       setError(error.message);
     }
