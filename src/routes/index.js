@@ -17,6 +17,7 @@ import Register from "../pages/Register/RegisterPage";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import ViewFormPage from "pages/ExaminationForm/ViewFormPage";
 import ViewFormPageWithoutDoctorId from "pages/ExaminationForm/ViewFormPageWithoutDoctorId";
+import ProtectedRoute from "./protectedRoute";
 
 const AppRouter = () => {
   return (
@@ -27,23 +28,32 @@ const AppRouter = () => {
           <Route path="login" element={<LoginPage />} />
           <Route path="register" element={<Register />} />
         </Route>
-        <Route path="/admin" element={<AdminLayout />}>
-          <Route index element={<AdminViewUserPage />} />
-          <Route path="createUser" element={<AdminCreateUserPage />} />
+        <Route path="/admin" element={<ProtectedRoute role={"admin"} />}>
+          <Route path="/admin/view" element={<AdminViewUserPage />} />
+          <Route path="/admin/profile" element={<UserProfile />} />
+          <Route path="/admin/createUser" element={<AdminCreateUserPage />} />
         </Route>
-        <Route path="/doctor" element={<DoctorLayout />}>
-          {/* <Route index element={<ViewRecordPage />} /> */}
-          <Route index element={<ViewFormPage />} />
-          <Route path="profile" element={<DoctorProfile />} />
-          <Route path="createRecord/:formId" element={<CreateRecordPage />} />
+        <Route path="/doctor" element={<ProtectedRoute role={"doctor"} />}>
+          <Route path="/doctor/view" element={<ViewFormPage />} />
+          <Route path="/doctor/profile" element={<DoctorProfile />} />
+          <Route
+            path="/doctor/createRecord/:formId"
+            element={<CreateRecordPage />}
+          />
         </Route>
-        <Route path="/receptionist" element={<ReceptionLayout />}>
-          {/* <Route index element={<ViewFormPage />} /> */}
-          <Route index element={<ViewFormPageWithoutDoctorId />} />
+        <Route
+          path="/receptionist"
+          element={<ProtectedRoute role={"receptionist"} />}
+        >
+          <Route path="/receptionist/profile" element={<UserProfile />} />
+          <Route
+            path="/receptionist/view"
+            element={<ViewFormPageWithoutDoctorId />}
+          />
         </Route>
-        <Route path="/home" element={<HomePageLayout />}>
-          <Route path="profile" element={<UserProfile />} />
-          <Route path="createForm" element={<CreateFormPage />} />
+        <Route path="/home" element={<ProtectedRoute role={"user"} />}>
+          <Route path="/home/profile" element={<UserProfile />} />
+          <Route path="/home/createForm" element={<CreateFormPage />} />
         </Route>
       </Routes>
     </BrowserRouter>

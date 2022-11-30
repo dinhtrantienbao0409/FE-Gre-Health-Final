@@ -9,7 +9,7 @@ const HomePageLayout = () => {
   // const userRole = useSelector((state) => state.auth.role);
   const location = useLocation();
 
-  return Object.keys(authLogin).includes("id") && { userRole: "user" } ? (
+  return (
     <div>
       <NavBar />
       <Sidebar />
@@ -18,9 +18,11 @@ const HomePageLayout = () => {
         <Footer />
       </div> */}
     </div>
-  ) : (
-    <Navigate to="/login" replace state={{ from: location }} />
   );
 };
+
+// Object.keys(authLogin).includes("id") && { userRole: "user" } ? : (
+// <Navigate to="/login" replace state={{ from: location }} />
+// );
 
 export default HomePageLayout;

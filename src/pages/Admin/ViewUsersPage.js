@@ -19,7 +19,7 @@ export default function AdminViewUserPage() {
   ];
 
   const navigate = useNavigate();
-  const [users, setUsers] = useState();
+  const [users, setUsers] = useState([]);
   console.log(
     "🚀 ~ file: ViewUsersPage.js ~ line 20 ~ AdminViewUserPage ~ users",
     users
@@ -32,7 +32,7 @@ export default function AdminViewUserPage() {
         "🚀 ~ file: ViewUsersPage.js ~ line 28 ~ fetchUsers ~ response",
         response
       );
-      setUsers(response.data);
+      setUsers(response.data.docs);
     } catch (error) {
       console.log(
         "🚀 ~ file: ViewUsersPage.js ~ line 26 ~ fetchUsers ~ error",
