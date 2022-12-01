@@ -2,7 +2,19 @@ import "App.css";
 import { useEffect, useState } from "react";
 import ReactPaginate from "react-paginate";
 
-export default function TableBody({ data }) {
+const tableHeadData = [
+  { name: "Email" },
+  { name: "Name" },
+  { name: "Gender" },
+  { name: "Role" },
+  { name: "Date of Birth" },
+  { name: "Address" },
+  { name: "Contact" },
+  { name: "Update" },
+  { name: "Delete" },
+];
+
+export default function TableBody({ data, button1, button2 }) {
   const [currentItems, setCurrentItems] = useState([]);
   const [pageCount, setPageCount] = useState(0);
   const [itemOffset, setItemOffset] = useState(0);
@@ -16,43 +28,62 @@ export default function TableBody({ data }) {
 
   const handlePageClick = (event) => {
     const newOffset = (event.selected * itemsPerPage) % data.length;
-    // console.log(
-    //   `User requested page number ${event.selected}, which is offset ${newOffset}`
-    // );
     setItemOffset(newOffset);
   };
 
   return (
     <>
-      <tbody>
-        {currentItems &&
-          currentItems.map((record) => (
-            <tr key={record._id}>
-              <td class="py-4 px-6">{record.name}</td>
-              <td class="py-4 px-6">{record.gender}</td>
-              <td class="py-4 px-6">{record.dateOfBirth}</td>
-              <td class="py-4 px-6">{record.address}</td>
-              <td class="py-4 px-6">{record.age}</td>
-              <td class="py-4 px-6">{record.contact}</td>
-              <td class="py-4 px-6">{record.healthCondition}</td>
-              <td class="py-4 px-6">{record.doctorSuggestion}</td>
-            </tr>
-          ))}
-      </tbody>
-      <ReactPaginate
-        breakLabel="..."
-        nextLabel=">"
-        onPageChange={handlePageClick}
-        pageRangeDisplayed={3}
-        pageCount={pageCount}
-        previousLabel="<"
-        renderOnZeroPageCount={null}
-        containerClassName="pagination"
-        pageLinkClassName="page-num"
-        previousLinkClassName="page-num"
-        nextLinkClassName="page-num"
-        activeLinkClassName="active"
-      />
+      <div>
+        <thead class="text-xs uppercase bg-white dark:bg-gray-200 ">
+          <tr>
+            {tableHeadData.map((item) => (
+              <th scope="col" class="py-3 px-6">
+                {item.name}
+              </th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {currentItems &&
+            currentItems.map((item) => (
+              <tr key={item._id}>
+                <td class="py-4 px-6">{item.email}</td>
+                <td class="py-4 px-6">{item.name}</td>
+                <td class="py-4 px-6">{item.gender}</td>
+                <td class="py-4 px-6">{item.role}</td>
+                <td class="py-4 px-6">{item.dateOfBirth}</td>
+                <td class="py-4 px-6">{item.address}</td>
+                <td class="py-4 px-6">{item.contact}</td>
+                <td>
+                  <button className="  flex justify-center py-2 px-4  text-xs font-medium font-bold rounded-full text-white bg-yellow-400 hover:bg-yellow-300">
+                    {button1}
+                  </button>
+                </td>
+                <td>
+                  <button className="  flex justify-center py-2 px-4  text-xs font-medium font-bold rounded-full text-white bg-red-500 hover:bg-red-400">
+                    {button2}
+                  </button>
+                </td>
+              </tr>
+            ))}
+        </tbody>
+      </div>
+      <div>
+        <ReactPaginate
+          breakLabel="..."
+          nextLabel=">"
+          onPageChange={handlePageClick}
+          pageRangeDisplayed={3}
+          pageCount={pageCount}
+          previousLabel="<"
+          renderOnZeroPageCount={null}
+          containerClassName="pagination"
+          pageLinkClassName="page-num"
+          previousLinkClassName="page-num"
+          nextLinkClassName="page-num"
+          activeLinkClassName="active"
+        />
+      </div>
     </>
   );
 }

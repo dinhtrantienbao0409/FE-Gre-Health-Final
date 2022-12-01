@@ -3,6 +3,8 @@ import { useState } from "react";
 import { getUserProfile } from "services/Auth";
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
+import DoctorLayout from "layouts/doctor.layouts";
+import Footer from "components/LandingPage/Footer";
 
 export default function DoctorProfile() {
   const userId = useSelector((state) => state.auth.id);
@@ -28,9 +30,7 @@ export default function DoctorProfile() {
 
   useEffect(() => {
     //logic
-    console.log(">>>>>");
-    const data = fetchUserProfile();
-    console.log("🚀 ~ file: UserProfile.js ~ line 34 ~ useEffect ~ data", data);
+    fetchUserProfile();
   }, []);
 
   return (
@@ -46,8 +46,7 @@ export default function DoctorProfile() {
                 Personal details and application.
               </p>
             </div>
-            {/* {profiles &&
-        profiles.map((item) => ( */}
+
             <div className="border-t border-gray-200 ">
               <dl>
                 <div className="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
@@ -168,10 +167,11 @@ export default function DoctorProfile() {
                 </div>
               </dl>
             </div>
-            {/* ))} */}
           </div>
         </div>
       )}
+      <DoctorLayout />
+      <Footer />
     </div>
   );
 }

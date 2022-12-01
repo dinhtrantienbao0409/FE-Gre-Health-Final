@@ -4,20 +4,10 @@ import { useNavigate } from "react-router-dom";
 
 import Footer from "components/LandingPage/Footer";
 import { getAllUsers } from "services/Auth";
+import AdminLayout from "layouts/admin.layouts";
+import TableBody from "components/HomePage/TableBody";
 
 export default function AdminViewUserPage() {
-  const tableHeadData = [
-    { name: "Email" },
-    { name: "Name" },
-    { name: "Gender" },
-    { name: "Role" },
-    { name: "Date of Birth" },
-    { name: "Address" },
-    { name: "Contact" },
-    { name: "Update" },
-    { name: "Delete" },
-  ];
-
   const navigate = useNavigate();
   const [users, setUsers] = useState([]);
   console.log(
@@ -32,7 +22,7 @@ export default function AdminViewUserPage() {
         "🚀 ~ file: ViewUsersPage.js ~ line 28 ~ fetchUsers ~ response",
         response
       );
-      setUsers(response.data.docs);
+      setUsers(response.data);
     } catch (error) {
       console.log(
         "🚀 ~ file: ViewUsersPage.js ~ line 26 ~ fetchUsers ~ error",
@@ -60,43 +50,13 @@ export default function AdminViewUserPage() {
           >
             Create User
           </button>
+
           <table class="w-full text-sm text-left  ">
-            <thead class="text-xs uppercase bg-white dark:bg-gray-200 ">
-              <tr>
-                {tableHeadData.map((item) => (
-                  <th scope="col" class="py-3 px-6">
-                    {item.name}
-                  </th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {users &&
-                users.map((user) => (
-                  <tr key={user._id}>
-                    <td class="py-4 px-6">{user.email}</td>
-                    <td class="py-4 px-6">{user.name}</td>
-                    <td class="py-4 px-6">{user.gender}</td>
-                    <td class="py-4 px-6">{user.role}</td>
-                    <td class="py-4 px-6">{user.dateOfBirth}</td>
-                    <td class="py-4 px-6">{user.address}</td>
-                    <td class="py-4 px-6">{user.contact}</td>
-                    <td>
-                      <button className="  flex justify-center py-2 px-4  text-xs font-medium font-bold rounded-full text-white bg-yellow-400 hover:bg-yellow-300">
-                        Update
-                      </button>
-                    </td>
-                    <td>
-                      <button className="  flex justify-center py-2 px-4  text-xs font-medium font-bold rounded-full text-white bg-red-500 hover:bg-red-400">
-                        Delete
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-            </tbody>
+            <TableBody data={users} button1={"Update"} button2={"Delete"} />
           </table>
         </div>
       </div>
+      <AdminLayout />
       <Footer />
     </div>
   );

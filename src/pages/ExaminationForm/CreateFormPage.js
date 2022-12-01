@@ -14,6 +14,7 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import Stack from "@mui/material/Stack";
+import HomePageLayout from "layouts/HomePage";
 
 const schemaValidation = yup.object().shape({
   username: yup.string().required(),
@@ -509,6 +510,7 @@ export default function CreateFormPage() {
           </form>
         </div>
       </div>
+      <HomePageLayout />
       <Footer />
     </div>
   );
