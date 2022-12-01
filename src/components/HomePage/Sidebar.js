@@ -4,7 +4,7 @@ import { SidebarData } from "../../layoutData/HomePageData";
 // import Logo from "../Logo";
 
 const Sidebar = () => {
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(false);
   return (
     <div
       className={`fixed bg-gray-600 min-h-screen transition-all ${

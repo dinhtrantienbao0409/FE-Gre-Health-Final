@@ -7,6 +7,7 @@ import * as yup from "yup";
 
 import Footer from "components/LandingPage/Footer";
 import { registerFunc } from "services/Auth";
+import AdminLayout from "layouts/admin.layouts";
 
 const schemaValidation = yup.object().shape({
   email: yup.string().email().required(),
@@ -421,6 +422,7 @@ export default function AdminCreateUserPage() {
           </form>
         </div>
       </div>
+      <AdminLayout />
       <Footer />
     </div>
   );

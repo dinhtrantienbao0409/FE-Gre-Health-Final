@@ -19,13 +19,25 @@ export default function CustomDropdown() {
   });
   const loggedInUser = useSelector((state) => state.auth.email);
   const userId = useSelector((state) => state.auth.id);
+  const userRole = useSelector((state) => state.auth.role);
   console.log(
-    "🚀 ~ file: CustomDropdown.js ~ line 14 ~ CustomDropdown ~ userId",
-    userId
+    "🚀 ~ file: CustomDropdown.js:23 ~ CustomDropdown ~ userRole",
+    userRole
   );
 
   const handleNavigate = () => {
-    navigate("/profile");
+    if (userRole === "admin") {
+      navigate("admin/profile");
+    }
+    if (userRole === "doctor") {
+      navigate("/doctor/profile");
+    }
+    if (userRole === "receptionist") {
+      navigate("receptionist/profile");
+    }
+    if (userRole === "user") {
+      navigate("home/profile");
+    }
   };
 
   const handleDialog = (message, isLoading) => {

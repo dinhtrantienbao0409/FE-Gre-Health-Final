@@ -13,16 +13,16 @@ export default function ({ role }) {
   }
   if (isLoggedIn && role !== userRole) {
     if (userRole === "admin") {
-      return <Navigate to="/admin" />;
+      return <Navigate to="/admin/view" />;
     }
     if (userRole === "doctor") {
-      return <Navigate to="/doctor" />;
+      return <Navigate to="/doctor/view" />;
     }
     if (userRole === "receptionist") {
-      return <Navigate to="/receptionist" />;
+      return <Navigate to="/receptionist/view" />;
     }
     if (userRole === "user") {
-      return <Navigate to="/home" />;
+      return <Navigate to="/home/view" />;
     }
   }
   return <Navigate to="/login" />;

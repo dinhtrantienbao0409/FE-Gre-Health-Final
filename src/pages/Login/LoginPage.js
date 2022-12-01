@@ -26,16 +26,16 @@ const Login = () => {
     if (isLoggedIn) {
       switch (userRole) {
         case "admin":
-          navigate("/admin");
+          navigate("/admin/view");
           break;
         case "doctor":
-          navigate("/doctor");
+          navigate("/doctor/view");
           break;
         case "receptionist":
-          navigate("/receptionist");
+          navigate("/receptionist/view");
           break;
         case "user":
-          navigate("/home");
+          navigate("/home/view");
           break;
       }
     }
