@@ -1,8 +1,8 @@
-import { Outlet, Navigate, useLocation } from "react-router-dom";
+import { Outlet, Navigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import React from "react";
 
-export default function ({ role }) {
+export default function ProtectedRoute({ role }) {
   const isLoggedIn = useSelector((state) => state.auth);
   console.log("🚀 ~ file: protectedRoute.js ~ line 7 ~ isLoggedIn", isLoggedIn);
   const userRole = useSelector((state) => state.auth.role);
