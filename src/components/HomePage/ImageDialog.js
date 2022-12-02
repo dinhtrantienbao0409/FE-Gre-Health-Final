@@ -13,10 +13,10 @@ export default function ImageDialog({ onDialog }) {
   const dispatch = useDispatch();
   const imageUrl = useSelector((state) => state.firebaseImage.url);
 
-  function handleChange(event) {
+  const handleChange = (event) => {
     const selectedFile = event.target.files[0];
     setFile(selectedFile);
-  }
+  };
   const handleCancel = () => {
     dispatch(removeFirebaseImage(imageUrl));
   };
@@ -69,7 +69,7 @@ export default function ImageDialog({ onDialog }) {
             <div className="w-full px-4 py-3">
               <button
                 type="button"
-                className="mt-3 inline-flex w-full justify-center cursor-pointer rounded-md bg-gray-400 border border-gray-300 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
+                className="mt-3 inline-flex w-full justify-center cursor-pointer rounded-md bg-gray-500 border border-gray-300 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
                 onClick={() => onDialog(false)}
               >
                 Cancel
@@ -78,14 +78,14 @@ export default function ImageDialog({ onDialog }) {
                 <button
                   disabled
                   type="button"
-                  className="inline-flex w-full justify-center cursor-pointer rounded-md bg-red-300 px-4 py-2 text-base font-medium text-white shadow-sm focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 sm:ml-3 sm:w-auto sm:text-sm"
+                  className="inline-flex w-full justify-center cursor-pointer rounded-md bg-red-200 px-4 py-2 text-base font-medium text-white shadow-sm focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 sm:ml-3 sm:w-auto sm:text-sm"
                 >
                   Add image
                 </button>
               ) : (
                 <button
                   type="button"
-                  className="inline-flex w-full justify-center cursor-pointer rounded-md border border-transparent bg-red-500 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 sm:ml-3 sm:w-auto sm:text-sm"
+                  className="inline-flex w-full justify-center cursor-pointer rounded-md border border-transparent bg-red-500 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-red-400 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 sm:ml-3 sm:w-auto sm:text-sm"
                   onClick={handleUploadImage}
                 >
                   Add image
