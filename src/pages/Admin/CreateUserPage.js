@@ -83,8 +83,6 @@ export default function AdminCreateUserPage() {
           </h1>
           <form
             className="mt-8 space-y-6"
-            // action="#"
-            // method="POST"
             onSubmit={handleSubmit(handleCreateUser)}
           >
             <input type="hidden" name="remember" defaultValue="true" />
