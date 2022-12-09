@@ -253,7 +253,6 @@ export default function CreateFormPage() {
                           className=" appearance-none rounded-md block w-full px-3 py-2 border border-gray-300 bg-gray-300 font-bold text-gray-600 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                           onChange={onChange}
                           value={value}
-                          // {...register("userId")}
                         />
                       )}
                     />
@@ -276,7 +275,6 @@ export default function CreateFormPage() {
                             disabled
                             onChange={onChange}
                             value={value}
-                            // {...register("gender")}
                           />
                         </div>
                       )}
@@ -300,7 +298,6 @@ export default function CreateFormPage() {
                             disabled
                             onChange={onChange}
                             value={value}
-                            // {...register("gender")}
                           />
                         </div>
                       )}
@@ -327,7 +324,6 @@ export default function CreateFormPage() {
                             disabled
                             onChange={onChange}
                             value={value}
-                            // {...register("address")}
                           />
                         </div>
                       )}
@@ -351,7 +347,6 @@ export default function CreateFormPage() {
                             disabled
                             onChange={onChange}
                             value={value}
-                            // {...register("address")}
                           />
                         </div>
                       )}
@@ -375,7 +370,6 @@ export default function CreateFormPage() {
                             disabled
                             onChange={onChange}
                             value={value}
-                            // {...register("address")}
                           />
                         </div>
                       )}
@@ -396,46 +390,6 @@ export default function CreateFormPage() {
                 control={control}
                 render={({ field: { onChange, value } }) => (
                   <div className=" w-2/3 my-4 mx-2 w-full flex flex-col item-start">
-                    {/* <div className="form-check flex flex-row gap-20">
-                      <label className="form-check-label inline-block text-gray-800">
-                        Examination
-                        <input
-                          className="form-check-input appearance-none rounded-full h-4 w-4 border border-gray-300 bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer"
-                          type="radio"
-                          // name="flexRadioDefault"
-                          id="flexRadioDefault1"
-                          value="Examination"
-                          name="reason"
-                          // {...register("reason", { required: true })}
-                        />
-                      </label>
-                      <label className="form-check-label inline-block text-gray-800">
-                        Emergency
-                        <input
-                          className="form-check-input appearance-none rounded-full h-4 w-4 border border-gray-300 bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer"
-                          type="radio"
-                          // name="flexRadioDefault"
-                          id="flexRadioDefault1"
-                          value="Emergency"
-                          name="reason"
-                          // {...register("reason", { required: true })}
-                        />
-                      </label>
-                      <label
-                        className="form-check-label inline-block text-gray-800"
-                        value="Consultation"
-                      >
-                        Consultation
-                        <input
-                          className="form-check-input appearance-none rounded-full h-4 w-4 border border-gray-300 bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer"
-                          type="radio"
-                          // name="flexRadioDefault"
-                          id="flexRadioDefault1"
-                          name="reason"
-                          // {...register("reason", { required: true })}
-                        />
-                      </label>
-                    </div> */}
                     <RadioGroup
                       aria-labelledby="demo-radio-buttons-group-label"
                       name="radio-buttons-group"
