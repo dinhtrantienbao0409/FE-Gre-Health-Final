@@ -1,11 +1,15 @@
 import { useForm } from "react-hook-form";
 import { useState } from "react";
 import { loginFunc } from "../../services/Auth";
+import { callbackWithGoogle, loginWithGoogle } from "../../services/OAuth";
 import { useNavigate } from "react-router-dom";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useDispatch } from "react-redux";
 import { setLoggedInUser } from "slice/authSlice/logginSlice";
+import ImageDialog from "components/HomePage/ImageDialog";
+import { Link, redirect } from "react-router-dom";
+import { Axios } from "axios";
 
 const schemaValidation = yup.object().shape({
   email: yup.string().email().required(),
@@ -16,6 +20,12 @@ const Login = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [error, setError] = useState("");
+  const [dialog, setDialog] = useState({
+    isLoading: false,
+  });
+  const [dialogText, setDialogText] = useState("");
+  const [password, setPassword] = useState("");
+
   const {
     register,
     handleSubmit,
@@ -26,24 +36,37 @@ const Login = () => {
     if (isLoggedIn) {
       switch (userRole) {
         case "admin":
-          navigate("/admin/view");
+          navigate("/admin");
           break;
         case "doctor":
-          navigate("/doctor/view");
+          navigate("/doctor");
           break;
         case "receptionist":
-          navigate("/receptionist/view");
+          navigate("/receptionist");
           break;
         case "user":
-          navigate("/home/view");
+          navigate("/home");
           break;
       }
+    }
+  };
+  const handleDialog = (isLoading) => {
+    setDialog({
+      isLoading,
+    });
+  };
+
+  const confirmDialog = (choose) => {
+    if (choose) {
+      handleDialog(false);
+      setPassword("");
     }
   };
 
   const handleLogin = async (data) => {
     try {
       const { email, password } = data;
+      setPassword(password);
       const payload = {
         email,
         password,
@@ -65,6 +88,50 @@ const Login = () => {
       // navigate("/home");
     } catch (error) {
       setError(error.message);
+      handleDialog(true);
+      setDialogText("Login Dialog");
+    }
+  };
+
+  // const handleLoginWithGoogle = async () => {
+  //   try {
+  //     window.location.href = "http://localhost:3001/auth/google";
+  //     const data = await callbackWithGoogle();
+  //     console.log(
+  //       "🚀 ~ file: LoginPage.js:98 ~ handleLoginWithGoogle ~ data",
+  //       data
+  //     );
+  //   } catch (error) {
+  //     console.log(
+  //       "🚀 ~ file: LoginPage.js:103 ~ handleLoginWithGoogle ~ error",
+  //       error
+  //     );
+  //   }
+  // };
+
+  const handleFetchUserData = async () => {
+    const response = await Axios.get("http://localhost3001/Oauth/user", {
+      withCredentials: true,
+    });
+    console.log(
+      "🚀 ~ file: LoginPage.js:113 ~ handleFetchUserData ~ response",
+      response
+    );
+  };
+
+  const redirectToGoogleLogin = async (jwt) => {
+    let timer;
+    window.location.href = "http://localhost:3001/auth/google";
+
+    // setCookie("jwt", jwt);
+    // alert(`jwt is ${JSON.stringify(cookies["jwt"])}`);
+    if (window.location.href) {
+      timer = setInterval(() => {
+        handleFetchUserData();
+        if (timer) {
+          clearInterval(timer);
+        }
+      }, 500);
     }
   };
 
@@ -170,20 +237,26 @@ const Login = () => {
           <div className="flex items-center my-4 before:flex-1 before:border-t before:border-gray-300 before:mt-0.5 after:flex-1 after:border-t after:border-gray-300 after:mt-0.5">
             <p className="text-center font-semibold mx-4 mb-0">OR</p>
           </div>
-          <button
-            type="submit"
-            className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-800 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-600"
-          >
-            Login with Facebook
-          </button>
-          <button
-            type="submit"
-            className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-          >
-            Login with Google
-          </button>
         </form>
+        {/* <a href="http://localhost:3001/auth/google"> */}
+        <button
+          // type="submit"
+          onClick={redirectToGoogleLogin}
+          className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+        >
+          Login with Google
+        </button>
+        {/* </a> */}
       </div>
+      {dialog.isLoading && (
+        <ImageDialog
+          //Update
+          // formId={formId}
+          onDialog={confirmDialog}
+          // setValue={setValue}
+          name={dialogText}
+        />
+      )}
     </div>
   );
 };

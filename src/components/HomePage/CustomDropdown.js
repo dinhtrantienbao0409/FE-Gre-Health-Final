@@ -20,16 +20,17 @@ export default function CustomDropdown() {
   const loggedInUser = useSelector((state) => state.auth.email);
   const userId = useSelector((state) => state.auth.id);
   const userRole = useSelector((state) => state.auth.role);
-  console.log(
-    "🚀 ~ file: CustomDropdown.js:23 ~ CustomDropdown ~ userRole",
-    userRole
-  );
 
   const handleNavigate = () => {
     if (userRole === "admin") {
       navigate("admin/profile");
     }
     if (userRole === "doctor") {
+      console.log(
+        "🚀 ~ file: CustomDropdown.js:33 ~ handleNavigate ~ userRole",
+        userRole
+      );
+
       navigate("/doctor/profile");
     }
     if (userRole === "receptionist") {
@@ -109,7 +110,7 @@ export default function CustomDropdown() {
                   </Link>
                 )}
               </Menu.Item>
-              <Menu.Item>
+              {/* <Menu.Item>
                 {({ active }) => (
                   <Link
                     to=""
@@ -121,7 +122,7 @@ export default function CustomDropdown() {
                     Health Record
                   </Link>
                 )}
-              </Menu.Item>
+              </Menu.Item> */}
 
               {/* <form method="POST" action="#"> */}
               <Menu.Item>

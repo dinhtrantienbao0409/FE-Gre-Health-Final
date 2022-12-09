@@ -2,7 +2,7 @@ import "App.css";
 import { useEffect, useState } from "react";
 import ReactPaginate from "react-paginate";
 
-export default function PaginateComponent({ data, onClick, button }) {
+export default function RecordComponent({ data, onClick, button }) {
   const [currentItems, setCurrentItems] = useState([]);
   const [pageCount, setPageCount] = useState(0);
   const [itemOffset, setItemOffset] = useState(0);
@@ -28,19 +28,37 @@ export default function PaginateComponent({ data, onClick, button }) {
               className="w-1/2 rounded-lg shadow-md lg:max-w-sm cursor-pointer hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
               onClick={() => onClick(item._id)}
               id={item._id}
+              key={item._id}
             >
               <div className="p-4">
-                <h4 className="text-xl font-semibold tracking-tight text-blue-600">
+                <h4 className="text-xl font-semibold tracking-tight text-blue-600 my-2">
                   {item.username}
                 </h4>
-                <p className="mb-2 leading-normal">{item.reason}</p>
-                <p className="mb-2 leading-normal">{item.dateRequest}</p>
-                <p className="mb-2 leading-normal">{item.diseaseSymptoms}</p>
-                <p className="mb-2 leading-normal">{item.contact}</p>
-                <p className="mb-2 leading-normal">{item.address}</p>
-                <button className="px-4 py-2 text-sm text-blue-100 bg-blue-500 rounded shadow">
-                  {button}
-                </button>
+                <div className="flex items-center my-4 flex-1 border-t border-gray-300 mt-0 " />
+                <div className="flex flex-col items-start ">
+                  <p className="mb-2 leading-normal">Dentist:</p>
+                  <p className="mb-2 leading-normal font-bold">
+                    {item.doctorName}
+                  </p>
+                  <p className="mb-2 leading-normal">Symptoms:</p>
+                  <p className="mb-2 leading-normal font-bold text-red-600">
+                    {item.dentalSymptoms}
+                  </p>
+                </div>
+                <div className="flex items-center my-4 flex-1 border-t border-gray-300 mt-0 " />
+
+                <div className="flex flex-col items-center">
+                  <p className="mb-2 leading-normal text-gray-500">
+                    Contact the dentist at:
+                  </p>
+                  <p className="mb-2 leading-normal font-semibold text-blue-600 text-xs">
+                    {item.doctorEmail}
+                  </p>
+                </div>
+
+                <div className="flex items-center my-4 flex-1 border-t border-gray-300 mt-0 " />
+
+                <text className="font-semibold text-gray-400 ">{button}</text>
               </div>
             </div>
           ))}

@@ -29,10 +29,10 @@ export default function Example() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-48">
           <div className="lg:text-center">
             <h2 className="text-lg font-semibold text-cyan-500">
-              Health Record Management
+              Gre Dental Health
             </h2>
             <p className="mt-2 mb-2 text-3xl font-bold leading-8 tracking-tight text-gray-900 sm:text-4xl">
-              A better way to live healthy and convenient
+              A better way to take care of your oral health
             </p>
             <p className="mt-4 mb-4 max-w-2xl text-xl text-gray-500 lg:mx-auto">
               Lorem ipsum dolor sit amet consect adipisicing elit. Possimus

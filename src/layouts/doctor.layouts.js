@@ -6,10 +6,7 @@ import DoctorNavbar from "components/Navbar/DoctorNavbar";
 export default function DoctorLayout() {
   const authLogin = useSelector((state) => state.auth);
   const userRole = useSelector((state) => state.auth.role);
-  console.log(
-    "🚀 ~ file: HomePage.js ~ line 10 ~ HomePageLayout ~ userRole",
-    userRole
-  );
+
   const location = useLocation();
 
   return Object.keys(authLogin).includes("id") ? (

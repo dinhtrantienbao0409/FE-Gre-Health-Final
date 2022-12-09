@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
 import { getAllDoctors } from "services/Auth";
 import { updateFormFunc } from "services/Form";
+import { useNavigate } from "react-router-dom";
 
 export default function FormDialog({ formId, onDialog }) {
+  const navigate = useNavigate();
   const [doctor, setDoctor] = useState();
   const [doctorId, setDoctorId] = useState();
 
@@ -52,17 +54,22 @@ export default function FormDialog({ formId, onDialog }) {
           onChange={handleGetDoctorId}
           className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-white dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-900 dark:focus:ring-blue-500 dark:focus:border-blue-500"
         >
-          <option selected>Choose a doctor</option>
+          <option defaultValue>Choose a doctor</option>
           {doctor &&
-            doctor.map((item) => <option value={item._id}>{item.name}</option>)}
+            doctor.map((item) => (
+              <option key={item._id} value={item._id}>
+                {item.name}
+              </option>
+            ))}
         </select>
         <div className="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
           <button
             type="button"
             className="inline-flex w-full justify-center cursor-pointer rounded-md border border-transparent bg-red-500 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 sm:ml-3 sm:w-auto sm:text-sm"
             onClick={() => {
-              // onDialog(true);
+              onDialog(false);
               updateForm();
+              navigate(0);
             }}
           >
             Assign Doctor
