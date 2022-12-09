@@ -100,28 +100,6 @@ export default function ViewFormPageByUser() {
                   </div>
                 </div>
               )}
-
-              {/* {formWithStatus.length === 0 ? (
-                <NoDataComponent />
-              ) : (
-                // <div className="mx-auto flex items-start justify-center max-w-7xl px-4 sm:px-6 lg:px-8 pb-48">
-                // <div className="flex flex-row p-10 shadow-xl w-full  gap-12 rounded-lg">
-                <div>
-                  <div className="flex items-start text-2xl font-bold py-8 text-gray-500">
-                    <h1>Examination forms have been created dental records</h1>
-                  </div>
-                  <div className="flex flex-row">
-                    <FormComponent
-                      data={formWithStatus}
-                      // onClick={handleClick}
-                      button={"View Details"}
-                    />
-                  </div>
-                </div>
-
-                // </div>
-                // </div>
-              )} */}
             </div>
           </div>
           <Footer />
