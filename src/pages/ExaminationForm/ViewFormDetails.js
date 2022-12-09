@@ -231,32 +231,6 @@ export default function ViewFormDetails() {
                             Do you have dental examination on a regular basis?
                           </label>
                           <div className="mb-4 mx-2 w-full flex flex-col item-start">
-                            {/* <div className="flex flex-row space-x-32 mt-2">
-                              <div className="form-check">
-                                <label className="form-check-label inline-block text-gray-800">
-                                  Yes
-                                  <input
-                                    className="form-check-input appearance-none rounded-full h-4 w-4 border border-gray-300 bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer"
-                                    type="radio"
-                                    // name="flexRadioDefault1"
-                                    id="flexRadioDefault2"
-                                    value="Yes"
-                                  />
-                                </label>
-                              </div>
-                              <div className="form-check">
-                                <label className="form-check-label inline-block text-gray-800">
-                                  No
-                                  <input
-                                    className="form-check-input appearance-none rounded-full h-4 w-4 border border-gray-300 bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer"
-                                    type="radio"
-                                    // name="flexRadioDefault1"
-                                    id="flexRadioDefault2"
-                                    value="No"
-                                  />
-                                </label>
-                              </div>
-                            </div> */}
                             <div className="w-1/2 flex flex-col item-start">
                               <input
                                 id="reason"
@@ -277,32 +251,6 @@ export default function ViewFormDetails() {
                             Do you have a specific dental problems?
                           </label>
                           <div className="mb-4 mx-2 w-full flex flex-col item-start">
-                            {/* <div className="flex flex-row space-x-32 mt-2">
-                              <div className="form-check">
-                                <label className="form-check-label inline-block text-gray-800">
-                                  Yes
-                                  <input
-                                    className="form-check-input appearance-none rounded-full h-4 w-4 border border-gray-300 bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer"
-                                    type="radio"
-                                    // name="flexRadioDefault2"
-                                    id="flexRadioDefault3"
-                                    value="Yes"
-                                  />
-                                </label>
-                              </div>
-                              <div className="form-check">
-                                <label className="form-check-label inline-block text-gray-800">
-                                  No
-                                  <input
-                                    className="form-check-input appearance-none rounded-full h-4 w-4 border border-gray-300 bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer"
-                                    type="radio"
-                                    // name="flexRadioDefault2"
-                                    id="flexRadioDefault3"
-                                    value="No"
-                                  />
-                                </label>
-                              </div>
-                            </div> */}
                             <div className="w-1/2 flex flex-col item-start">
                               <input
                                 id="reason"
