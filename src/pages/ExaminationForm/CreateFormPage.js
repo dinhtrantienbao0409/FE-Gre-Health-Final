@@ -106,10 +106,6 @@ export default function CreateFormPage() {
   };
 
   const handleCreateForm = async (data) => {
-    console.log(
-      "🚀 ~ file: CreateFormPage.js:80 ~ handleCreateForm ~ data",
-      data
-    );
     try {
       setDialogText("");
       const {
@@ -146,7 +142,6 @@ export default function CreateFormPage() {
       );
 
       const response = await createFormFunc(payload);
-      // navigate("/home/createdForm");
       if (response.status === 200) {
         handleDialog(true);
         setDialogText("Form Dialog");
