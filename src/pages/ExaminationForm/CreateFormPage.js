@@ -556,23 +556,6 @@ export default function CreateFormPage() {
               </h1>
               <div className=" rounded-md shadow-sm -space-y-px gap-5">
                 <div className="my-4 flex flex-col">
-                  {/* <div className=" w-2/3 flex flex-col item-start">
-                    <label
-                      className="flex item-start text-sm font-bold text-gray-600"
-                      htmlFor="date-of-birth"
-                    >
-                      Date & Time Examined
-                    </label>
-                    <input
-                      id="dateRequest"
-                      name="dateRequest"
-                      type="text"
-                      className=" appearance-none rounded-md  block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                      {...register("dateRequest", { required: true })}
-                    />
-                    
-                  {/* </div> */}
-
                   <Controller
                     name="dateRequest"
                     control={control}
