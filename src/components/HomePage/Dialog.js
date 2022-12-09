@@ -7,7 +7,7 @@ export default function Dialog({ message, onDialog }) {
       onClick={() => onDialog(false)}
     >
       <div
-        className="absolute flex flex-col items-center top-1/3 left-1/3  p-10 rounded-md bg-white"
+        className="absolute flex flex-col items-center top-1/3 left-1/4  p-10 rounded-md bg-white"
         onClick={(e) => e.stopPropagation()}
       >
         <div>

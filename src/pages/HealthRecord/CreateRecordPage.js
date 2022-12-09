@@ -8,10 +8,11 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 
 import { getUserProfile } from "services/Auth";
-import { getFormById } from "services/Form";
+import { getFormById, updateFormStatus } from "services/Form";
 import DoctorLayout from "layouts/doctor.layouts";
 import ImageDialog from "components/HomePage/ImageDialog";
-import { removeFirebaseImage } from "slice/authSlice/imageSlice";
+import { removeFirebaseImage } from "slice/imageSlice";
+import { MailSender } from "services/Mail";
 
 const schemaValidation = yup.object().shape({
   diagnosis: yup.string().required(),
@@ -24,27 +25,32 @@ export default function CreateRecordPage() {
   const imageUrl = useSelector((state) => state.firebaseImage.url);
 
   const { formId } = useParams();
+
   const navigate = useNavigate();
   const [error, setError] = useState("");
   const [doctorProfile, setDoctorProfile] = useState();
-
   const [formData, setFormData] = useState();
 
   const [dialog, setDialog] = useState({
     isLoading: false,
   });
+  const [dialogText, setDialogText] = useState("");
 
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors },
   } = useForm({ resolver: yupResolver(schemaValidation) });
+
+  register("imageUrl");
 
   const handleDialog = (isLoading) => {
     setDialog({
       isLoading,
     });
   };
+
   const confirmDialog = (choose) => {
     if (choose) {
       handleDialog(false);
@@ -52,13 +58,17 @@ export default function CreateRecordPage() {
       handleDialog(false);
     }
   };
+
   const handleImageButton = () => {
     handleDialog(true);
+    setDialogText("Image Dialog");
   };
+
   const handleBack = () => {
     navigate("/doctor/view");
     dispatch(removeFirebaseImage(imageUrl));
   };
+
   const fetchDoctorProfile = async () => {
     try {
       const response = await getUserProfile(userId);
@@ -90,7 +100,12 @@ export default function CreateRecordPage() {
   }, []);
 
   const handleCreateRecord = async (data) => {
+    console.log(
+      "🚀 ~ file: CreateRecordPage.js:93 ~ handleCreateRecord ~ data",
+      data
+    );
     try {
+      setDialogText("");
       const {
         doctorName,
         doctorEmail,
@@ -101,9 +116,18 @@ export default function CreateRecordPage() {
         userDateOfBirth,
         userAddress,
         userContact,
+        dentalSymptoms,
         diagnosis,
         treatmentPlan,
+        imageUrl,
+        doctorId,
+        userId,
       } = data;
+      console.log(
+        "🚀 ~ file: CreateRecordPage.js:108 ~ handleCreateRecord ~ data",
+        data
+      );
+
       const payload = {
         doctorName,
         doctorEmail,
@@ -114,8 +138,12 @@ export default function CreateRecordPage() {
         userDateOfBirth,
         userAddress,
         userContact,
+        dentalSymptoms,
         diagnosis,
         treatmentPlan,
+        imageUrl,
+        doctorId,
+        userId,
       };
       console.log(
         "🚀 ~ file: CreateRecordPage.js ~ line 38 ~ CreateRecordPage ~ payload",
@@ -123,11 +151,56 @@ export default function CreateRecordPage() {
       );
 
       const response = await createRecordFunc(payload);
-      // navigate("/home/record");
+      console.log(
+        "🚀 ~ file: CreateRecordPage.js:152 ~ handleCreateRecord ~ response",
+        response
+      );
+
+      if (response.status === 200) {
+        handleDialog(true);
+        setDialogText("Record Dialog");
+        handleSendMail();
+        handleUpdateFormStatus();
+      }
 
       return response.data;
     } catch (error) {
       setError(error.message);
+    }
+  };
+
+  const handleUpdateFormStatus = async () => {
+    try {
+      const status = "done";
+      const response = await updateFormStatus(formId, status);
+      console.log(
+        "🚀 ~ file: CreateRecordPage.js:174 ~ handleUpdateFormStatus ~ response",
+        response.data
+      );
+      return response.data;
+    } catch (error) {
+      console.log(
+        "🚀 ~ file: CreateRecordPage.js:176 ~ handleUpdateFormStatus ~ error",
+        error
+      );
+    }
+  };
+
+  const handleSendMail = async () => {
+    const mailTemplate = {
+      receiver: formData.email,
+      subject: "[DO NOT REPLY] GRE ORAL HEALTH: Dental reacord",
+      text: "You have a notification from Gre Oral Health system",
+      message: `Dear ${formData.username}, Based on your medical examination, the dentist has created your dental record on the system. Please log in to your account on the system to view detailed information.`,
+    };
+    try {
+      const mail = await MailSender(mailTemplate);
+      return mail;
+    } catch (error) {
+      console.log(
+        "🚀 ~ file: CreateRecordPage.js:170 ~ handleSendMail ~ error",
+        error
+      );
     }
   };
   return (
@@ -151,12 +224,20 @@ export default function CreateRecordPage() {
             // method="POST"
             onSubmit={handleSubmit(handleCreateRecord)}
           >
+            <div></div>
             {doctorProfile && (
               <div className="doctorInfo">
                 <h1 className="mt-2 text-start text-xl font-extrabold text-gray-900">
                   Dentist Information
                 </h1>
                 <input type="hidden" name="remember" defaultValue="true" />
+                <input
+                  id="doctorId"
+                  type="hidden"
+                  className=" appearance-none rounded-md block w-full px-3 py-2 border border-gray-300 bg-gray-300 font-bold text-gray-600 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                  defaultValue={doctorProfile._id}
+                  {...register("doctorId")}
+                />
                 <div className="rounded-md shadow-sm -space-y-px gap-5">
                   <div className="flex space-x-4 my-4 mx-2">
                     <div className="w-1/2 flex flex-col item-start">
@@ -167,12 +248,12 @@ export default function CreateRecordPage() {
                         Full Name
                       </label>
                       <input
-                        id="name"
-                        name="name"
+                        id="doctorName"
                         type="text"
                         className=" appearance-none rounded-md block w-full px-3 py-2 border border-gray-300 bg-gray-300 font-bold text-gray-600 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                         readOnly
                         defaultValue={doctorProfile.name}
+                        {...register("doctorName")}
                       />
                     </div>
 
@@ -184,12 +265,12 @@ export default function CreateRecordPage() {
                         Email
                       </label>
                       <input
-                        id="email"
-                        name="email"
+                        id="doctorEmail"
                         type="text"
                         className=" appearance-none rounded-md  block w-full px-3 py-2 border border-gray-300 bg-gray-300 font-bold text-gray-600 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                         readOnly
                         defaultValue={doctorProfile.email}
+                        {...register("doctorEmail")}
                       />
                     </div>
                   </div>
@@ -203,12 +284,12 @@ export default function CreateRecordPage() {
                         Address
                       </label>
                       <input
-                        id="address"
-                        name="address"
+                        id="doctorAddress"
                         type="text"
                         className=" appearance-none rounded-md  block w-full px-3 py-2 border border-gray-300 bg-gray-300 font-bold text-gray-600 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                         readOnly
                         defaultValue={doctorProfile.address}
+                        {...register("doctorAddress")}
                       />
                     </div>
 
@@ -220,12 +301,13 @@ export default function CreateRecordPage() {
                         Phone number
                       </label>
                       <input
-                        id="contact"
+                        id="doctorContact"
                         name="contact"
                         type="text"
                         className=" appearance-none rounded-md  block w-full px-3 py-2 border border-gray-300 bg-gray-300 font-bold text-gray-600 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                         readOnly
                         defaultValue={doctorProfile.contact}
+                        {...register("doctorContact")}
                       />
                     </div>
                   </div>
@@ -241,6 +323,15 @@ export default function CreateRecordPage() {
                   Member Information
                 </h1>
                 <input type="hidden" name="remember" defaultValue="true" />
+                <input
+                  id="userId"
+                  name="name"
+                  type="hidden"
+                  className="bg-gray-300 appearance-none rounded-md block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 font-bold text-gray-600 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                  defaultValue={formData.userId}
+                  readOnly
+                  {...register("userId")}
+                />
                 <div className="rounded-md shadow-sm -space-y-px gap-5">
                   <div className="flex space-x-4 my-4 mx-2">
                     <div className="w-1/2 flex flex-col item-start">
@@ -251,12 +342,13 @@ export default function CreateRecordPage() {
                         Full Name
                       </label>
                       <input
-                        id="name"
+                        id="username"
                         name="name"
                         type="text"
                         className="bg-gray-300 appearance-none rounded-md block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 font-bold text-gray-600 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                         defaultValue={formData.username}
                         readOnly
+                        {...register("username")}
                       />
                     </div>
                     <div className="w-1/2 flex flex-col item-start">
@@ -267,12 +359,13 @@ export default function CreateRecordPage() {
                         Gender
                       </label>
                       <input
-                        id="gender"
+                        id="userGender"
                         name="gender"
                         type="text"
                         className="bg-gray-300 appearance-none rounded-md block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 font-bold text-gray-600 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                         defaultValue={formData.gender}
                         readOnly
+                        {...register("userGender")}
                       />
                     </div>
                     <div className="w-1/2 flex flex-col item-start">
@@ -283,12 +376,13 @@ export default function CreateRecordPage() {
                         Date of Birth
                       </label>
                       <input
-                        id="dateOfBirth"
+                        id="userDateOfBirth"
                         name="dateOfBirth"
                         type="text"
                         className="bg-gray-300 appearance-none rounded-md  block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 font-bold text-gray-600 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                         defaultValue={formData.dateOfBirth}
                         readOnly
+                        {...register("userDateOfBirth")}
                       />
                     </div>
                   </div>
@@ -302,13 +396,14 @@ export default function CreateRecordPage() {
                         Address
                       </label>
                       <input
-                        id="address"
+                        id="userAddress"
                         name="address"
                         type="text"
                         className="bg-gray-300 appearance-none rounded-md  block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 font-bold text-gray-600 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                         placeholder="Enter your address"
                         defaultValue={formData.address}
                         readOnly
+                        {...register("userAddress")}
                       />
                     </div>
                     <div className=" mb-4 w-1/2 flex flex-col item-start">
@@ -319,13 +414,14 @@ export default function CreateRecordPage() {
                         Phone number
                       </label>
                       <input
-                        id="contact"
+                        id="userContact"
                         name="contact"
                         type="text"
                         className="bg-gray-300 appearance-none rounded-md  block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 font-bold text-gray-600 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                         placeholder="Enter your phone number"
                         defaultValue={formData.contact}
                         readOnly
+                        {...register("userContact")}
                       />
                     </div>
                   </div>
@@ -338,13 +434,14 @@ export default function CreateRecordPage() {
                     </label>
 
                     <textarea
-                      id="disease-symptoms"
+                      id="dentalSymptoms"
                       name="disease-symptoms"
                       type="text"
                       className="bg-gray-300 appearance-none rounded-md  block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 font-bold text-gray-600 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                       rows="5"
                       readOnly
                       defaultValue={formData.diseaseSymptoms}
+                      {...register("dentalSymptoms")}
                     ></textarea>
                   </div>
                 </div>
@@ -422,7 +519,6 @@ export default function CreateRecordPage() {
                       <img
                         className="object-cover h-full rounded-md w-full"
                         src="https://images.tute.io/static/img/noimg-thumbnail.png"
-                        alt="Click here to add image"
                       />
                     </div>
                   </div>
@@ -439,6 +535,7 @@ export default function CreateRecordPage() {
                       // onClick={handleImageButton}
                     >
                       <img
+                        id="imageUrl"
                         className="object-cover h-full rounded-md w-full"
                         src={imageUrl}
                       />
@@ -457,21 +554,22 @@ export default function CreateRecordPage() {
               >
                 Cancel
               </button>
-              <button
+              <input
                 type="submit"
+                value={"submit"}
+                // onClick={setDialogText("Mail Dialog")}
                 className="w-1/4 mx-2 group  w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-cyan-500 hover:bg-cyan-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-400"
-              >
-                Create
-              </button>
+              />
             </div>
           </form>
         </div>
       </div>
       {dialog.isLoading && (
         <ImageDialog
-          //Update
           formId={formId}
           onDialog={confirmDialog}
+          setValue={setValue}
+          name={dialogText}
         />
       )}
       <DoctorLayout />

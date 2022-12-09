@@ -1,24 +1,18 @@
 import { createSlice } from "@reduxjs/toolkit";
 
+const initialState = {
+  url: "",
+};
+
 export const ImageSlide = createSlice({
   name: "firebaseImage",
-  initialState: {
-    url: "",
-    // password: "",
-    // confirmPassword: "",
-    // name: "",
-    // dateOfBirth: "",
-    // gender: "",
-    // address: "",
-    // contact: "",
-    // jobTitle: "",
-  },
+  initialState: initialState,
   reducers: {
     setFirebaseImage: (state, action) => {
       state.url = action.payload;
       return state;
     },
-    removeFirebaseImage: (state, action) => (state = {}),
+    removeFirebaseImage: (state, action) => Object.assign(state, initialState),
   },
 });
 

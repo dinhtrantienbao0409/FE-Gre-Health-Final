@@ -11,7 +11,8 @@ import {
 } from "redux-persist";
 import storage from "redux-persist/lib/storage"; // defaults to localStorage for web
 import authReducer from "slice/authSlice/logginSlice";
-import imageReducer from "slice/authSlice/imageSlice";
+import imageReducer from "slice/imageSlice";
+import SearchReducer from "slice/searchSlice";
 
 const persistConfig = {
   key: "root",
@@ -25,6 +26,7 @@ export const store = configureStore({
   reducer: {
     auth: persistedReducer,
     firebaseImage: imageReducer,
+    search: SearchReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
