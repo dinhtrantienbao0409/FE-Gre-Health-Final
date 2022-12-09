@@ -34,21 +34,12 @@ export default function ViewFormPageByUser() {
 
   const handleSearch = async () => {
     try {
-      // let signedForm = [];
-      // let unSignedForm = [];
       const response = await searchFormsByUser(searchQuery, userId);
       console.log(
         "🚀 ~ file: ViewFormPageByUser.js:40 ~ handleSearch ~ response",
         response
       );
-      // for (let item of response.data) {
-      //   if (item.status === "") {
-      //     unSignedForm.push(item);
-      //   } else {
-      //     signedForm.push(item);
-      //   }
-      // }
-      // setForm(unSignedForm);
+
       setForm(response.data);
     } catch (error) {
       console.log(
@@ -87,8 +78,6 @@ export default function ViewFormPageByUser() {
               {form.length === 0 ? (
                 <NoDataComponent />
               ) : (
-                // <div className="mx-auto flex items-start justify-center max-w-7xl px-4 sm:px-6 lg:px-8 pt-48">
-                // <div className="flex flex-row p-10 shadow-xl w-full  gap-12 rounded-lg">
                 <div>
                   <div className="flex flex-row gap-20">
                     <div className="flex items-start text-2xl font-bold py-8 text-gray-500 ">
@@ -110,9 +99,6 @@ export default function ViewFormPageByUser() {
                     />
                   </div>
                 </div>
-
-                // </div>
-                // </div>
               )}
 
               {/* {formWithStatus.length === 0 ? (
