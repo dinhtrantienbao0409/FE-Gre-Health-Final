@@ -575,25 +575,6 @@ export default function CreateFormPage() {
                           onChange={onChange}
                           value={value}
                         />
-                        {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
-                          <Stack spacing={1}>
-                            <DateTimePicker
-                              renderInput={(params) => (
-                                <TextField
-                                  {...params}
-                                  // {...register("dateRequest", {
-                                  //   required: true,
-                                  // })}
-                                />
-                              )}
-                              value={value}
-                              onChange={(newDate) => {
-                                setDate(newDate);
-                                onChange();
-                              }}
-                            />
-                          </Stack>
-                        </LocalizationProvider> */}
                       </div>
                     )}
                   />
