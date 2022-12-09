@@ -50,7 +50,6 @@ export default function ViewRecordByUser() {
   };
 
   useEffect(() => {
-    //logic
     if (isSearching === false) {
       fetchRecordsByUserId();
     } else {
