@@ -311,22 +311,6 @@ export default function ViewFormDetails() {
                             className=" appearance-none rounded-md  block w-full px-3 py-2 border border-gray-300 bg-gray-300 font-bold text-gray-600 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                             defaultValue={formData.dateRequest}
                           />
-                          {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
-                          <Stack spacing={1}>
-                            <DateTimePicker
-                              renderInput={(params) => (
-                                <TextField
-                                  {...params}
-                                  {...register("dateRequest", { required: true })}
-                                />
-                              )}
-                              value={value}
-                              onChange={(newValue) => {
-                                setValue(newValue);
-                              }}
-                            />
-                          </Stack>
-                        </LocalizationProvider> */}
                         </div>
                       </div>
                     </div>
