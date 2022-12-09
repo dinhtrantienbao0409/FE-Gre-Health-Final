@@ -67,12 +67,7 @@ export default function ViewRecordDetails() {
                   </div>
                   <div className="flex items-center my-4 before:flex-1 before:border-t before:border-gray-300 before:mt-0 after:flex-1 after:border-t after:border-gray-300 after:mt-0"></div>
 
-                  <form
-                    className="mt-8 space-y-6"
-                    // action="#"
-                    // method="POST"
-                    // onSubmit={handleSubmit(handleCreateRecord)}
-                  >
+                  <form className="mt-8 space-y-6">
                     <div className="doctorInfo">
                       <h1 className="mt-2 text-start text-xl font-extrabold text-gray-900">
                         Dentist Information
@@ -114,7 +109,6 @@ export default function ViewRecordDetails() {
                               className=" appearance-none rounded-md  block w-full px-3 py-2 border border-gray-300 bg-gray-300 font-bold text-gray-600 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                               readOnly
                               defaultValue={recordData.doctorEmail}
-                              // {...register("doctorEmail")}
                             />
                           </div>
                         </div>
@@ -133,7 +127,6 @@ export default function ViewRecordDetails() {
                               className=" appearance-none rounded-md  block w-full px-3 py-2 border border-gray-300 bg-gray-300 font-bold text-gray-600 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                               readOnly
                               defaultValue={recordData.doctorAddress}
-                              // {...register("doctorAddress")}
                             />
                           </div>
 
@@ -151,7 +144,6 @@ export default function ViewRecordDetails() {
                               className=" appearance-none rounded-md  block w-full px-3 py-2 border border-gray-300 bg-gray-300 font-bold text-gray-600 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                               readOnly
                               defaultValue={recordData.doctorContact}
-                              // {...register("doctorContact")}
                             />
                           </div>
                         </div>
@@ -160,7 +152,6 @@ export default function ViewRecordDetails() {
 
                     <div className="flex items-center my-4 before:flex-1 before:border-t before:border-gray-300 before:mt-0 after:flex-1 after:border-t after:border-gray-300 after:mt-0"></div>
 
-                    {/* {formData && ( */}
                     <div className="userInfo">
                       <h1 className="mt-2 text-start text-xl font-extrabold text-gray-900">
                         Member Information
@@ -279,7 +270,6 @@ export default function ViewRecordDetails() {
                         </div>
                       </div>
                     </div>
-                    {/* )} */}
 
                     <div className="flex items-center my-4 before:flex-1 before:border-t before:border-gray-300 before:mt-0 after:flex-1 after:border-t after:border-gray-300 after:mt-0"></div>
 
@@ -337,10 +327,7 @@ export default function ViewRecordDetails() {
                             Illustrating images
                           </label>
                           {recordData.imageUrl ? (
-                            <div
-                              className="bg-cover bg-white rounded-md h-full"
-                              // onClick={handleImageButton}
-                            >
+                            <div className="bg-cover bg-white rounded-md h-full">
                               <img
                                 id="imageUrl"
                                 className="object-cover h-full rounded-md w-full"
@@ -348,10 +335,7 @@ export default function ViewRecordDetails() {
                               />
                             </div>
                           ) : (
-                            <div
-                              className="bg-cover bg-white rounded-md h-full"
-                              // onClick={handleImageButton}
-                            >
+                            <div className="bg-cover bg-white rounded-md h-full">
                               <img
                                 id="imageUrl"
                                 className="object-cover h-full rounded-md w-full"
